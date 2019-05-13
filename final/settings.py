@@ -126,7 +126,7 @@ USE_TZ = False
 STATIC_URL = '/static/'
 
 STATICFILES_DIRS = [
-
+    os.path(BASE_DIR, 'final', 'static')
 ]
 
 AUTH_USER_MODEL = 'accounts.User'
