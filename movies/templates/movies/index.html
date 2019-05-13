@@ -1,11 +1,20 @@
 {% extends 'base.html' %}
-
+{% load static %}
 
 {% block title %}
-
+OurWatCha Movies
 {% endblock %}
 
 
 {% block body %}
-<h1>Yo</h1>
+<div class="container-fluid" id="movie_app">
+    <h2>Yeah</h2>
+    ${hey}
+</div>
+
+
+{% endblock %}
+
+{% block js %}
+<script src="{% static 'movies/js/app.js' %}"></script>
 {% endblock %}
