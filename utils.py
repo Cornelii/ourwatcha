@@ -96,7 +96,12 @@ naver_json_relations = {
 
 
 movie_boxoffice_json_relations = {
-
+    'movieCd':'id',
+    'movieNm':'title',
+    'openDt':'open_year',
+    'rank':'rank',
+    'salesAcc':'salesAcc',
+    'audiAcc':'audiAcc',
 }
 
 # movie_data_flow
@@ -203,10 +208,10 @@ class Data:
         return self.tr.json2json_list(target_url, method='GET')
 
     def get_actor_list(self, num_pages, **kwargs):
+        self.tr.set_map(actor_list_json_relations)
         result = []
         for page in range(1, num_pages+1):
             target_url = self.url_maker.actor_list_url(**kwargs)
-            self.tr.set_map(actor_list_json_relations)
             result.extend(self.tr.json2json_list(target_url, method='GET'))
         return result
 
@@ -231,3 +236,12 @@ class Data:
             return self.tr.json2json_list(target_url, method='GET', headers=self.url_maker_naver.headers)
 
 
+    # TODO 마져 완성하기 => 주간 boxoffice => 영화상세정보 => 받아오기로.
+    def get_movie_list_from_boxoffice(self, num, startDt=None,**kwargs):
+        result = []
+        self.tr.set_map(movie_boxoffice_json_relations)
+        for i in range(num):
+            targetDt = '20190514'
+            target_url = self.url_maker.weekly_boxoffice_url(targetDt=targetDt, **kwargs)
+            result.extend(self.tr.json2json_list(target_url, method='GET'))
+        return result
