@@ -169,7 +169,7 @@ class URL_naver:
 
 
 class Data:
-    def __init__(self, **kwargs):  # TODO naver key도 함께 쓸 수 있도록 수정.
+    def __init__(self, **kwargs):
         '''
 
         :param kwargs:
@@ -223,7 +223,7 @@ class Data:
         if Dtcheck:
             for obj in result:
                 if str(Dtcheck) == obj.get('valid_date'):
-                    print('It maybe valid')
+                    print('It may be valid, {}'.format(name))
                     return [obj]
             print('There could be no valid data in {}'.format(name))
             return result

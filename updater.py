@@ -23,10 +23,10 @@ data = Data(**{
 
 ## get movie_list
 movie_list_query = {
-    'itemPerPage': 30,
+    'itemPerPage': 100,
     'openStartDt': 2019,
     'openEndDt': 2020,
-    'flag':'',
+    #'flag':'',
     # 'flag'
 }
 
@@ -49,7 +49,7 @@ def actor_update(movie):
         director_names = movie_info[0].get('directors').split('|')
         people_names = actor_names + director_names
 
-        # naver에서 배우 imag들 크롤링
+        # naver에서 배우 imag들 스크랩핑
         res = requests.get(movie_info[0].get('peopleUrl')+'#tab/')
         soup = BS(res.text, 'html.parser')
         img_tags = soup.select('.p_thumb > a > img')
@@ -57,7 +57,7 @@ def actor_update(movie):
         for tag in img_tags:
             actor_imgs.update({tag['alt']: tag['src']})
 
-        # naver에서 배우 배역 크롤링
+        # naver에서 배우 배역 스크랩핑
         role_tags = soup.select('div.p_info')
         actor_roles = {}
         for tag in role_tags:
@@ -79,29 +79,34 @@ def actor_update(movie):
                         break
 
                 if actor_info:
+                    role = actor_info[0].pop('role')
+                    # role instance 생성
                     try:
-                        Actor.objects.get(code=actor_info[0].get('code'))
-                        continue
+                        role_obj = Role.objects.get(type_name=role)
                     except:
-                        role = actor_info[0].pop('role')
-                        # role instance 생성
-                        try:
-                            role_obj = Role.objects.get(type_name=role)
-                        except:
-                            role_obj = Role.objects.create(**{'type_name':role})
-                        if role == '배우' or role == '감독':
-                            if role == '배우':
+                        role_obj = Role.objects.create(**{'type_name':role})
+                    if role == '배우' or role == '감독':
+                        if role == '배우':
+                            try:
+                                person=Actor.objects.get(code=actor_info[0].get('code'))
+                            except:
                                 person = Actor.objects.create(**actor_info[0])
                                 movie.actors.add(person)
-                            else:
+                        else:
+                            try:
+                                person=Director.objects.get(code=actor_info[0].get('code'))
+                            except:
                                 person = Director.objects.create(**actor_info[0])
                                 movie.directors.add(person)
-                            person.portrait_url = actor_imgs.get(name)
-                        else:
+                        person.portrait_url = actor_imgs.get(name)
+                    else:
+                        try:
+                            person=Staff.objects.get(code=actor_info[0].get('code'))
+                        except:
                             person = Staff.objects.create(**actor_info[0])
                             movie.staffs.add(person)
-                        person.roles.add(role_obj)
-                        person.save()
+                    person.roles.add(role_obj)
+                    person.save()
         # description
         res_des = requests.get(movie_info[0].get('peopleUrl'))
         soup_des = BS(res_des.text, 'html.parser')
@@ -125,7 +130,7 @@ def actor_update(movie):
 
 
 
-movie_list = data.get_movie_list(7, **movie_list_query)
+movie_list = data.get_movie_list(5, **movie_list_query)
 print(movie_list)
 for movie in movie_list:
     try:
