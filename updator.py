@@ -15,6 +15,8 @@ NAVER_SECRET =os.getenv('NAVER_CLOVA_SECRET')
 MOVIE_KEY = os.getenv('MOVIE_KEY')
 NAVER_MOVIE_BASE_URL = 'https://movie.naver.com'
 
+BOXOFFICE_FLAG = True
+
 data = Data(**{
     'API_KEY': MOVIE_KEY,
     'NAVER_ID': NAVER_ID,
@@ -29,6 +31,12 @@ movie_list_query = {
     #'flag':'',
     # 'flag'
 }
+
+## weekly boxoffcie query
+weekly_boxoffice_query = {
+    'weekGb':0,
+}
+
 
 ## 영화정보에서 네이버를 통해서 정보 얻어오기.
 def actor_update(movie):
@@ -128,49 +136,66 @@ def actor_update(movie):
                 trail_clip = frame['src']
                 Trailer.objects.create(trailer_url=NAVER_MOVIE_BASE_URL+trail_clip, movie=movie)
 
-
-
-movie_list = data.get_movie_list(5, **movie_list_query)
+if BOXOFFICE_FLAG:
+    movie_list = data.get_movie_list_from_boxoffice(104, '20181224',**weekly_boxoffice_query)
+else:
+    movie_list = data.get_movie_list(5, **movie_list_query)
 print(movie_list)
 for movie in movie_list:
     try:
-        Movie.objects.get(id=movie.get('id'))
+        # sales and audience update case when using weekly boxoffice
+        existing_movie = Movie.objects.get(id=movie.get('id'))
         print("Unique Constraint failed with {}".format(movie.get('title')))
+        if existing_movie.sales and movie.get('sales'):
+            if existing_movie.sales < int(movie.get('sales')):
+                existing_movie.sales = int(movie.get('sales'))
+                existing_movie.save()
+        elif movie.get('sales'):
+            existing_movie.sales = int(movie.get('sales'))
+            existing_movie.save()
+        if existing_movie.audience and movie.get('audience'):
+            if existing_movie.audience < int(movie.get('audience')):
+                existing_movie.audience = int(movie.get('audience'))
+                existing_movie.save()
+        elif movie.get('audience'):
+            existing_movie.audience = int(movie.get('audience'))
+            existing_movie.save()
     except:
-        movie_detail = data.get_movie_detail(movieCd=movie.get('id'))[0]
-        genre_flag = True
-        nation_flag = True
-        try:
-            genre = movie_detail.pop('genre')
-        except:
-            genre_flag = False
-        try:
-            nation = movie_detail.pop('nation')
-        except:
-            nation_flag = False
-        try:
-            movie_detail['running_time'] = int(movie_detail.get('running_time'))
-        except:
-            movie_detail['running_time'] = -1
-        # nation 처리
+        if data.get_movie_detail(movieCd=movie.get('id')):
+            movie_detail = data.get_movie_detail(movieCd=movie.get('id'))[0]
+            genre_flag = True
+            nation_flag = True
+            try:
+                genre = movie_detail.pop('genre')
+            except:
+                genre_flag = False
+            try:
+                nation = movie_detail.pop('nation')
+            except:
+                nation_flag = False
+            try:
+                movie_detail['running_time'] = int(movie_detail.get('running_time'))
+            except:
+                movie_detail['running_time'] = -1
+            # nation 처리
 
-        if nation_flag:
-            tmp_nation = []
-            for nat in nation:
-                tmp_nation.append(nat.get('nationNm'))
+            if nation_flag:
+                tmp_nation = []
+                for nat in nation:
+                    tmp_nation.append(nat.get('nationNm'))
 
-            movie_detail.update(nation="|".join(tmp_nation))
-        movie.update(movie_detail)
-        obj = Movie.objects.create(**movie)
-        # genre 처리
-        if genre_flag:
-            for gen in genre:
-                try:
-                    genre_obj = Genre.objects.create(type_name=gen.get('genreNm'))
-                except:
-                    genre_obj = Genre.objects.get(type_name=gen.get('genreNm'))
-                obj.genre.add(genre_obj)
-        actor_update(obj)
+                movie_detail.update(nation="|".join(tmp_nation))
+            movie.update(movie_detail)
+            obj = Movie.objects.create(**movie)
+            # genre 처리
+            if genre_flag:
+                for gen in genre:
+                    try:
+                        genre_obj = Genre.objects.create(type_name=gen.get('genreNm'))
+                    except:
+                        genre_obj = Genre.objects.get(type_name=gen.get('genreNm'))
+                    obj.genre.add(genre_obj)
+            actor_update(obj)
 
 
 

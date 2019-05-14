@@ -11,15 +11,11 @@ OurWatCha Movies
 
 {% block body %}
 <div class="container-fluid" id="movie_app">
-    {% for movie in movies %}
-        {% if movie.grade != '청소년관람불가' %}
-
-            <a href="{% url 'movies:movie_detail' movie.id %}"><p>{{ movie.title }}</p></a>
-            <p class="grades">{{ movie.grade }}</p>
-
-        {% endif %}
-    {% endfor %}
-
+    <div class="detail_content">
+        <p>{{ movie.title }}</p>
+        <p>{{ movie.grade }}</p>
+        <img src="{{ movie.poster_url }}" alt="">
+    </div>
 
 </div>
 

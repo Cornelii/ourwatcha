@@ -1,0 +1,21 @@
+body {
+    background-color:#202729;
+}
+
+nav {
+    color: white;
+
+}
+nav .logo {
+    color: white;
+    font-size:30px;
+}
+
+nav .nav-content {
+    color: white;
+    font-size:25px;
+}
+
+nav a:hover {
+
+}

@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}
+OurWatCha Movies
+{% endblock %}
+
+
+{% block body %}
+    <link rel="stylesheet" href="{% static 'movies/css/movies.css' %}">
+
+<div class="container-fluid" id="movie_app">
+    {% load bootstrap4 %}
+    <form action="{% url 'accounts:signup' %}">
+        {% csrf_token %}
+        {% bootstrap_form form %}
+        <button class="btn btn-light" type="submit">가입하기</button>
+    </form>
+</div>
+
+{% endblock %}
+
+{% block js %}
+<script src="{% static 'movies/js/app.js' %}"></script>
+{% endblock %}

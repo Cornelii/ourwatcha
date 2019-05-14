@@ -1,5 +1,8 @@
 import json
 import requests
+from datetime import datetime, timedelta
+
+TIMEDELTA_A_WEEK = timedelta(days=-7)
 
 class Json2Json:
     def __init__(self):
@@ -72,6 +75,8 @@ movie_detail_json_relations = {
     'watchGradeNm': 'grade',
     'nations': 'nation',
     'prdtStatNm': 'state',
+    'movieNmEn': 'en_title',
+    'prdtYear': 'prdt_year'
 }
 
 actor_list_json_relations = {
@@ -99,9 +104,8 @@ movie_boxoffice_json_relations = {
     'movieCd':'id',
     'movieNm':'title',
     'openDt':'open_year',
-    'rank':'rank',
-    'salesAcc':'salesAcc',
-    'audiAcc':'audiAcc',
+    'salesAcc':'sales',
+    'audiAcc':'audience',
 }
 
 # movie_data_flow
@@ -239,9 +243,17 @@ class Data:
     # TODO 마져 완성하기 => 주간 boxoffice => 영화상세정보 => 받아오기로.
     def get_movie_list_from_boxoffice(self, num, startDt=None,**kwargs):
         result = []
+        targetTime = datetime(int(startDt[:4]), int(startDt[4:6]), int(startDt[6:8]))
         self.tr.set_map(movie_boxoffice_json_relations)
         for i in range(num):
-            targetDt = '20190514'
+            targetTime += TIMEDELTA_A_WEEK
+            targetDt = targetTime.strftime('%Y%m%d')
             target_url = self.url_maker.weekly_boxoffice_url(targetDt=targetDt, **kwargs)
             result.extend(self.tr.json2json_list(target_url, method='GET'))
+            
         return result
+
+    def get_movie_list_from_boxoffice_daily(self, **kwargs):
+        target_url = self.url_maker.daily_boxoffice_base_url(**kwargs)
+        return self.tr.json2json_list(target_url, method='GET')
+

@@ -127,6 +127,7 @@ STATIC_URL = '/static/'
 
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'final', 'static'),
+    '/static/'
 ]
 
 AUTH_USER_MODEL = 'accounts.User'
