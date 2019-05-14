@@ -1,7 +1,7 @@
 from django.shortcuts import render, get_object_or_404
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
-
+from django.contrib.auth import get_user
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.http import require_POST
 
@@ -25,25 +25,30 @@ def movie_detail(request, movie_id):
     return Response(serializer.data)
 
 
-@api_view(['GET'])
+@api_view(['GET', 'POST'])
 def comment_list(request, movie_id):
-    movie = get_object_or_404(Movie, pk=movie_id)
-    comments = movie.comments.all()
-    serializer = CommentSerializer(comments, many=True)
-    return Response(serializer.data)
+    if request.method == 'POST':
+        if request.user.is_authenticated():
+            serializer = CommentSerializer(data=request.data)
+            if serializer.is_valid(raise_exception=True):
+                serializer.object.user = get_user()
+                serializer.save()
+                return Response(serializer.data)
+        else:
+            return Response({'message':'인증되지 않은 사용자입니다.'})
+    else:
+        movie = get_object_or_404(Movie, pk=movie_id)
+        comments = movie.comments.all()
+        serializer = CommentSerializer(comments, many=True)
+        return Response(serializer.data)
 
 
-@api_view(['GET', 'POST', 'DELETE', 'PUT'])
+@api_view(['GET', 'DELETE', 'PUT'])
 def comment_detail(request, movie_id, comment_id):
     comment = get_object_or_404(Comment, pk=comment_id)
     if request.method == 'GET':
         serializer = CommentSerializer(comment, many=False)
         return Response(serializer.data)
-    elif request.method == 'POST':
-        serializer = CommentSerializer(data=request.data)
-        if serializer.is_valid(raise_exception=True):
-            serializer.save()
-            return Response(serializer.data)
     elif request.method == 'DELETE':
         comment.delete()
         return Response({'message': '해당 평점이 삭제되었습니다.'})

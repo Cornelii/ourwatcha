@@ -18,10 +18,26 @@ OurWatCha Movies
     </div>
 
 </div>
+<div class="container-fluid" id="movie_detail_app">
+    <br>
+    <!-- 댓글 작성하기 -->
+    <div>
+        <input type="text">
+    </div>
+
+    <!-- 댓글 보여주기 -->
+    <template v-for="comment in comments">
+    <p>{{ comment.content }}</p>
+    </template>
+</div>
+
+
+
 
 
 {% endblock %}
 
 {% block js %}
 <script src="{% static 'movies/js/app.js' %}"></script>
+<script src="{% static 'movies/js/detail.js' %}"></script>
 {% endblock %}
