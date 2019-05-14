@@ -11,10 +11,10 @@ OurWatCha Movies
 
 <div class="container-fluid" id="movie_app">
     {% load bootstrap4 %}
-    <form action="{% url 'accounts:signup' %}">
+    <form action="" method="POST">
         {% csrf_token %}
         {% bootstrap_form form %}
-        <button class="btn btn-light" type="submit">가입하기</button>
+        <button class="btn btn-light" type="submit">{{ button_message }}</button>
     </form>
 </div>
 

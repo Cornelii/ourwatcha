@@ -2,7 +2,7 @@
 {% load static %}
 
 {% block title %}
-OurWatCha Movies
+    OURWATCHA MOVIES
 {% endblock %}
 
 {% block css %}
@@ -10,27 +10,92 @@ OurWatCha Movies
 {% endblock %}
 
 {% block body %}
-<div class="container-fluid" id="movie_app">
-    <div class="detail_content">
-        <p>{{ movie.title }}</p>
-        <p>{{ movie.grade }}</p>
-        <img src="{{ movie.poster_url }}" alt="">
+    <div class="container-fluid" id="movie_app">
+        <h4 class="movie-title">{{ movie.title }}</h4>
+        {% if movie.en_title %}
+            <h6 class="movie-en-title">{{ movie.en_title }}</h6>
+        {% endif %}
+
+        <div class="row">
+            <div class="col-4">
+                <img src="{{ movie.poster_url }}" alt="poster" class="movie-img">
+            </div>
+            <div class="col-8">
+                <div class="row director-list">
+                    <p>감독:</p>
+                    <p>
+                        {% for director in movie.directors.all %}
+                            {{ director.name }}
+                        {% endfor %}
+                    </p>
+                </div>
+                <div class="row actor-list">
+                    <p>배우:</p>
+                    <p>
+                        {% for actor in movie.actors.all %}
+                            {{ actor.name }}
+                        {% endfor %}
+                    </p>
+                </div>
+                <div class="row">
+                    <div class="col movie-info-col">
+                        <p>관람등급:{{ movie.grade }}</p>
+                        <p>
+                            장르:
+                            {% for genre in movie.genre.all %}
+                                {{ genre.type_name }}
+                            {% endfor %}
+                        </p>
+                        <p>개봉일:{{ movie.open_year }}</p>
+                    </div>
+                    <div class="col movie-info-col">
+                        <p>누적관람: {{ movie.audience }}명</p>
+                        <p>누적수익: {{ movie.sales }}원</p>
+                        <p>제작년도: {{ movie.prdt_year }}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 
-</div>
-<div class="container-fluid" id="movie_detail_app">
-    <br>
-    <!-- 댓글 작성하기 -->
-    <div>
-        <input type="text">
+    <div class="container-fluid" id="movie_detail_app">
+        <br>
+        <!-- 댓글 작성하기 -->
+        <div class="row">
+            <div class="col-7 user-comment">
+                <input type="text" v-model="user_content" placeholder=" 평점남기기" class="form-control" autofocus>
+            </div>
+            <div class="col-2 user-score">
+                <input type="number" min=0 max=10 v-model="user_score" placeholder=" 0~10" class="form-control">
+            </div>
+            <div class="col-2 user-button">
+                <button class="btn btn-outline-light" type="submit" @click="postComment">남기기</button>
+            </div>
+        </div>
+
+        <hr>
+        <!-- 댓글 보여주기 -->
+        <div class="row user_comments">
+            <div class="col-2">
+                <p>작성자</p>
+                <template v-for="comment in comments">
+                    <p>${ comment.user }</p>
+                </template>
+            </div>
+            <div class="col-8">
+                <p>작성글</p>
+                <template v-for="comment in comments">
+                    <p>${ comment.content }</p>
+                </template>
+            </div>
+            <div class="col-2">
+                <p>유저평점</p>
+                <template v-for="comment in comments">
+                    <p>${ comment.score }점</p>
+                </template>
+            </div>
+        </div>
     </div>
-
-    <!-- 댓글 보여주기 -->
-    <template v-for="comment in comments">
-    <p>{{ comment.content }}</p>
-    </template>
-</div>
-
 
 
 
@@ -38,6 +103,7 @@ OurWatCha Movies
 {% endblock %}
 
 {% block js %}
-<script src="{% static 'movies/js/app.js' %}"></script>
-<script src="{% static 'movies/js/detail.js' %}"></script>
+    <script src="{% static 'movies/js/app.js' %}"></script>
+    <script src="{% static 'movies/js/jquery3.4.1.js' %}"></script>
+    <script src="{% static 'movies/js/detail.js' %}"></script>
 {% endblock %}

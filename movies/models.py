@@ -45,7 +45,7 @@ class Comment(models.Model):
     content = models.CharField(max_length=5000)
     score = models.IntegerField()
     movie = models.ForeignKey(Movie, on_delete=models.CASCADE, related_name='comments')
-    users = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='comments')
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='comments')
 
     created = models.DateTimeField(auto_now_add=True)
     modified = models.DateTimeField(auto_now=True)

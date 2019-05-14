@@ -1,7 +1,7 @@
 from django.shortcuts import render, get_object_or_404
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
-from django.contrib.auth import get_user
+from django.contrib.auth import get_user_model
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.http import require_POST
 
@@ -28,10 +28,11 @@ def movie_detail(request, movie_id):
 @api_view(['GET', 'POST'])
 def comment_list(request, movie_id):
     if request.method == 'POST':
-        if request.user.is_authenticated():
+        if request.user.is_authenticated:
+            print(request.user.id)
+            request.data.update(user=request.user.id)
             serializer = CommentSerializer(data=request.data)
             if serializer.is_valid(raise_exception=True):
-                serializer.object.user = get_user()
                 serializer.save()
                 return Response(serializer.data)
         else:

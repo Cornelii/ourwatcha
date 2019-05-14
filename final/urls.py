@@ -19,7 +19,7 @@ from movies import views as movies_view
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', movies_view.root,'root'),
+    path('', movies_view.root, name='root'),
     path('accounts/', include('accounts.urls')),
     path('movies/', include('movies.urls')),
     path('people/', include('people.urls')),

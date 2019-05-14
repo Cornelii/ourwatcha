@@ -1,3 +1,68 @@
+/*
+{ font-family: 'Spoqa Han Sans', 'Spoqa Han Sans JP', 'Sans-serif'; }
+font-family: 'Yeon Sung', cursive;
+*/
+
 p {
-    color:white;
+    color:#dfdfdf;
+}
+
+.movie-title {
+    color:#dfdfdf;
+    font-family: 'Spoqa Han Sans', 'Spoqa Han Sans JP', 'Sans-serif';
+    font-size:50px;
+    margin-top:1rem;
+}
+
+.movie-en-title {
+    color:#dfdfdf;
+    font-family: 'Spoqa Han Sans', 'Spoqa Han Sans JP', 'Sans-serif';
+    font-size:30px;
+    margin-bottom:3rem;
+}
+
+
+.movie-img {
+    width:10rem;
+    height:auto;
+}
+
+.director-list, .actor-list{
+    color:#dfdfdf;
+    font-family: 'Spoqa Han Sans', 'Spoqa Han Sans JP', 'Sans-serif';
+    font-size:25px;
+}
+
+.movie-info-col {
+    padding:0;
+    font-family: 'Spoqa Han Sans', 'Spoqa Han Sans JP', 'Sans-serif';
+    font-size:20px;
+}
+
+/* 댓글 */
+.user-comment {
+
+}
+
+.user-score {
+    margin:0;
+}
+
+.user-button {
+    margin:0;
+    padidng:0;
+}
+
+.user_comments {
+    margin-top:2rem;
+    font-family: 'Yeon Sung', cursive;
+    font-size:23px;
+
+}
+
+.user_comments > div {
+}
+
+hr {
+    color:#dfdfdf;
 }

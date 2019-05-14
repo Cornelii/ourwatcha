@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}
+OurWatCha Movies
+{% endblock %}
+
+{% block css %}
+    <link rel="stylesheet" href="{% static 'people/css/people.css' %}">
+{% endblock %}
+
+
+{% block body %}
+<div class="container-fluid" id="people_app">
+
+    {% if status == '스태프' %}
+
+    {% else %}
+        <img src="{{ person.portrait_url }}" alt="">
+    {% endif %}
+    <h3>{{ person.name }}</h3>
+
+    <h3>{{ status }}</h3>
+    <h3>{{ person.filmography }}</h3>
+
+
+
+</div>
+
+
+{% endblock %}
+
+{% block js %}
+    <script src="{% static 'movies/js/app.js' %}"></script>
+    <script src="{% static 'people/js/people.js' %}"></script>
+{% endblock %}

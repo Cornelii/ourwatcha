@@ -1,21 +1,58 @@
 body {
-    background-color:#202729;
+    background-color:#262730;
 }
 
-nav {
-    color: white;
 
-}
 nav .logo {
     color: white;
     font-size:30px;
+    font-family: 'Spoqa Han Sans', 'Spoqa Han Sans JP', 'Sans-serif';
+    font-weight:bold;
 }
 
-nav .nav-content {
+nav .logo:hover {
+    font-size:32px;
+}
+
+.nav-item {
+    color:white;
+    font-size:20px;
+}
+
+li.nav-item button {
+    color:white;
+    font-size:20px;
+}
+
+li.nav-content {
     color: white;
     font-size:25px;
 }
 
 nav a:hover {
 
+}
+
+.root-box {
+    height:110vh;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size:cover;
+    opacity: 0.4;
+}
+
+#root-order-1 {
+    background-image: url("../imgs/gate_img1.jpg");
+}
+
+#root-order-2 {
+    background-image: url("../imgs/gate_img2.jpg");
+}
+
+#root-order-3 {
+    background-image: url("../imgs/gate_img3.jpg");
+}
+
+#root-order-4 {
+    background-image: url("../imgs/gate_img4.jpg");
 }

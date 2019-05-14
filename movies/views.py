@@ -1,19 +1,27 @@
 from django.shortcuts import render, redirect, get_object_or_404
+from django.contrib.auth.forms import AuthenticationForm
+from django.contrib.auth.decorators import login_required
 from .models import Movie, Genre, Comment, Trailer
-import requests
+
 
 # TODO: rootPage
 def root(request):
-    return render(request, 'movies/root.html')
+    auth_form = AuthenticationForm()
+    return render(request, 'movies/root.html',{
+        'form': auth_form
+    })
 
 
 # TODO: Create your views here.
+@login_required
 def index(request):
-    movies = Movie.objects.all()
-    print(movies)
-    return render(request, 'movies/index.html', {
-        'movies':movies
-    })
+    if request.user.is_authenticated:
+        movies = Movie.objects.all()
+        print(movies)
+        return render(request, 'movies/index.html', {
+            'movies':movies
+        })
+    return redirect('root')
 
 
 # TODO: movie detail page
