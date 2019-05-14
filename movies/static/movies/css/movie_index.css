@@ -1,0 +1,35 @@
+.carousel {
+    margin:2rem;
+    padding:2rem;
+}
+
+.carousel-item .col img{
+    height:23vh;
+}
+
+.carousel-item .col .card-title{
+    font-weight:bold;
+    font-size:13px;
+}
+
+.carousel-item .col .card-text{
+    font-size:10px;
+}
+
+.card {
+    height:35vh;
+}
+
+@media(max-width:900px){
+    .carousel-item .col .card-title,
+    .carousel-item .col .card-text
+    {
+        display:none
+    }
+    .carousel-item .col .card{
+        height:18vh;
+    }
+    .carousel-item .col img{
+        height:100%;
+    }
+}
