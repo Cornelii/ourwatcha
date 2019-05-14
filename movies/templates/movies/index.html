@@ -10,21 +10,106 @@ OurWatCha Movies
 {% endblock %}
 
 {% block body %}
+{#<div class="container-fluid" id="movie_app">#}
+{#    {% for movie in movies %}#}
+{#        {% if movie.grade != '청소년관람불가' %}#}
+{##}
+{#            <a href="{% url 'movies:movie_detail' movie.id %}"><p>{{ movie.title }}</p></a>#}
+{#            <p class="grades">{{ movie.grade }}</p>#}
+{##}
+{#        {% endif %}#}
+{#    {% endfor %}#}
+
 <div class="container-fluid" id="movie_app">
-    {% for movie in movies %}
-        {% if movie.grade != '청소년관람불가' %}
+    {#  완전추천  #}
+    <div class="row mt-4">
+        <div class="col">
+            <div id="Carousel1" class="carousel slide" data-ride="carousel">
+                <!-- Slides -->
+                <div class="carousel-inner">
+                    <div class="carousel-item active">
+                        <div class="row">
+                            <my-component title="heheh" text="sfsdf"></my-component>
+                            <my-component title="heheh" text="sfsdf"></my-component>
+                            <my-component title="heheh" text="sfsdf"></my-component>
+                            <my-component title="heheh" text="sfsdf"></my-component>
+                        </div>
+                    </div>
+                    <div class="carousel-item">
+                        <div class="row">
+                            <my-component title="heheh" text="sfsdf"></my-component>
+                            <my-component title="heheh" text="sfsdf"></my-component>
+                            <my-component title="heheh" text="sfsdf"></my-component>
+                            <my-component title="heheh" text="sfsdf"></my-component>
+                        </div>
+                    </div>
+                    <div class="carousel-item">
+                        <div class="row">
+                            <my-component title="heheh" text="sfsdf"></my-component>
+                            <my-component title="heheh" text="sfsdf"></my-component>
+                            <my-component title="heheh" text="sfsdf"></my-component>
+                            <my-component title="heheh" text="sfsdf"></my-component>
+                        </div>
+                    </div>
+                </div>
+                <!-- Left and right controls -->
+                <a class="carousel-control-prev" href="#Carousel1" data-slide="prev">
+                <span class="carousel-control-prev-icon"></span>
+                </a>
+                <a class="carousel-control-next" href="#Carousel1" data-slide="next">
+                <span class="carousel-control-next-icon"></span>
+                </a>
+            </div>
+        </div>
+    </div>
+    {#  장르별 추천  #}
 
-            <a href="{% url 'movies:movie_detail' movie.id %}"><p>{{ movie.title }}</p></a>
-            <p class="grades">{{ movie.grade }}</p>
-
-        {% endif %}
-    {% endfor %}
-
+    <div class="row mt-4">
+        <div class="col">
+            <div id="Carousel2" class="carousel slide" data-ride="carousel">
+                <!-- Slides -->
+                <div class="carousel-inner">
+                    <div class="carousel-item active">
+                        <div class="row">
+                            <my-component title="heheh" text="sfsdf"></my-component>
+                            <my-component title="heheh" text="sfsdf"></my-component>
+                            <my-component title="heheh" text="sfsdf"></my-component>
+                            <my-component title="heheh" text="sfsdf"></my-component>
+                        </div>
+                    </div>
+                    <div class="carousel-item">
+                        <div class="row">
+                            <my-component title="heheh" text="sfsdf"></my-component>
+                            <my-component title="heheh" text="sfsdf"></my-component>
+                            <my-component title="heheh" text="sfsdf"></my-component>
+                            <my-component title="heheh" text="sfsdf"></my-component>
+                        </div>
+                    </div>
+                    <div class="carousel-item">
+                        <div class="row">
+                            <my-component title="heheh" text="sfsdf"></my-component>
+                            <my-component title="heheh" text="sfsdf"></my-component>
+                            <my-component title="heheh" text="sfsdf"></my-component>
+                            <my-component title="heheh" text="sfsdf"></my-component>
+                        </div>
+                    </div>
+                </div>
+                <!-- Left and right controls -->
+                <a class="carousel-control-prev" href="#Carousel2" data-slide="prev">
+                <span class="carousel-control-prev-icon"></span>
+                </a>
+                <a class="carousel-control-next" href="#Carousel2" data-slide="next">
+                <span class="carousel-control-next-icon"></span>
+                </a>
+            </div>
+        </div>
+    </div>
 </div>
 
 
 {% endblock %}
 
 {% block js %}
-<script src="{% static 'movies/js/app.js' %}"></script>
+    <script src="{% static 'movies/js/app.js' %}"></script>
+
 {% endblock %}
