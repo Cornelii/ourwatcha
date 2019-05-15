@@ -2,11 +2,13 @@ from django.shortcuts import render, redirect
 from django.contrib.auth import login as auth_login
 from django.contrib.auth import logout as auth_logout
 from django.contrib.auth.forms import AuthenticationForm
-from .forms import CustomUserCreationForm
 from django.contrib.auth.decorators import login_required
 from django.conf import settings
+from django.contrib import messages
 from django.contrib.auth import get_user_model
 from django.contrib.auth import update_session_auth_hash
+
+from .forms import CustomUserCreationForm
 
 
 def signup(request):
@@ -16,6 +18,14 @@ def signup(request):
             user = form.save()
             auth_login(request, user)
             return redirect('movies:index')
+
+        # print error message (error reason) on signup page
+        for _, each_field_errors in form._errors.get_json_data().items():
+            for error in each_field_errors:
+                messages.warning(request, error.get('message'))
+
+        return redirect('accounts:signup')
+
     else:
         form = CustomUserCreationForm()
         return render(request, 'accounts/forms.html', {
