@@ -11,13 +11,9 @@ urlpatterns = [
     path('genres/', views.genre_list, name='genre_list'),
     path('genres/<int:genre_id>/movies/', views.genre_movies, name='genre_movies'),
 
-    path('people/actors/', views.actors, name='actors'),
-    path('people/directors/', views.directors, name='directors'),
-    path('people/staff/', views.staff, name='staff'),
+    path('people/', views.people, name='people'),
+    path('people/<int:people_id>', views.people_detail, name='people_detail'),
 
-    path('people/actors/<int:actor_id>', views.actor_detail, name='actor_detail'),
-    path('people/directors/<int:director_id>', views.director_detail, name='director_detail'),
-    path('people/staff/<int:staff_id>', views.staff_detail, name='staff_detail'),
 
     #TODO user-people temperatrue api
 

@@ -1,24 +1,13 @@
 from django import forms
-from .models import Role, Director, Actor, Staff
+from .models import Role, People
 
 
-class DirectorModelForm(forms.ModelForm):
-
-    class Meta:
-        model = Director
-        fields = '__all__'
-
-class ActorModelForm(forms.ModelForm):
+class PeopleModelForm(forms.ModelForm):
 
     class Meta:
-        model = Actor
+        model = People
         fields = '__all__'
 
-class StaffModelForm(forms.ModelForm):
-
-    class Meta:
-        model = Staff
-        fields = '__all__'
 
 class RoleModelForm(forms.ModelForm):
 

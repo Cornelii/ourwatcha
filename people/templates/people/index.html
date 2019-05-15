@@ -12,19 +12,9 @@ OurWatCha Movies
 
 {% block body %}
 <div class="container-fluid" id="people_app">
-    <h3>Director</h3>
-    {% for director in directors %}
-        <a href="#">{{ director.name }}</a>
-    {% endfor %}
-
-    <h3>Actors</h3>
-    {% for actor in actors %}
-        <a href="#">{{ actor.name }}</a>
-    {% endfor %}
-
-    <h3>Staff</h3>
-    {% for staf in staff %}
-        <a href="#">{{ staf.name }}</a>
+    <h3>People</h3>
+    {% for person in people %}
+        <a href="#">{{ person.name }}</a>
     {% endfor %}
 
 

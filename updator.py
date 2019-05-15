@@ -8,7 +8,7 @@ from utils import Data
 
 # importing models
 from movies.models import Movie, Genre, Trailer
-from people.models import Director, Actor, Staff, Role
+from people.models import People, Role
 
 NAVER_ID = os.getenv('NAVER_CLOVA_ID')
 NAVER_SECRET =os.getenv('NAVER_CLOVA_SECRET')
@@ -58,7 +58,10 @@ def actor_update(movie):
         people_names = actor_names + director_names
 
         # naver에서 배우 imag들 스크랩핑
-        res = requests.get(movie_info[0].get('peopleUrl')+'#tab/')
+        basic_url = movie_info[0].get('peopleUrl')
+        detail_url = basic_url.replace('basic','detail')
+        res = requests.get(detail_url+'#tab/')
+        # peopleUrl is not correct
         soup = BS(res.text, 'html.parser')
         img_tags = soup.select('.p_thumb > a > img')
         actor_imgs = {}
@@ -93,26 +96,12 @@ def actor_update(movie):
                         role_obj = Role.objects.get(type_name=role)
                     except:
                         role_obj = Role.objects.create(**{'type_name':role})
-                    if role == '배우' or role == '감독':
-                        if role == '배우':
-                            try:
-                                person=Actor.objects.get(code=actor_info[0].get('code'))
-                            except:
-                                person = Actor.objects.create(**actor_info[0])
-                                movie.actors.add(person)
-                        else:
-                            try:
-                                person=Director.objects.get(code=actor_info[0].get('code'))
-                            except:
-                                person = Director.objects.create(**actor_info[0])
-                                movie.directors.add(person)
+                    try:
+                        person = People.objects.get(code=actor_info[0].get('code'))
+                    except:
+                        person = People.objects.create(**actor_info[0])
+                        movie.people.add(person)
                         person.portrait_url = actor_imgs.get(name)
-                    else:
-                        try:
-                            person=Staff.objects.get(code=actor_info[0].get('code'))
-                        except:
-                            person = Staff.objects.create(**actor_info[0])
-                            movie.staffs.add(person)
                     person.roles.add(role_obj)
                     person.save()
         # description
@@ -136,8 +125,9 @@ def actor_update(movie):
                 trail_clip = frame['src']
                 Trailer.objects.create(trailer_url=NAVER_MOVIE_BASE_URL+trail_clip, movie=movie)
 
+
 if BOXOFFICE_FLAG:
-    movie_list = data.get_movie_list_from_boxoffice(104, '20181224',**weekly_boxoffice_query)
+    movie_list = data.get_movie_list_from_boxoffice(104, '20181224', **weekly_boxoffice_query)
 else:
     movie_list = data.get_movie_list(5, **movie_list_query)
 print(movie_list)

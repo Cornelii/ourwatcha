@@ -7,9 +7,9 @@ from django.contrib.auth.decorators import login_required
 from django.views.decorators.http import require_POST
 
 from .serializers import MovieSerializer, CommentSerializer, GenreSerializer
-from .serializers import ActorSerializer, StaffSerializer, DirectorSerializer
+from .serializers import PeopleSerializer
 from movies.models import Movie, Comment, Genre
-from people.models import Actor, Director, Staff
+from people.models import People
 from accounts.models import Temperature, GenrePreference
 
 
@@ -85,6 +85,7 @@ def genre_list(request):
     serializer = GenreSerializer(genres, many=True)
     return Response(serializer.data)
 
+
 @api_view(['GET'])
 def genre_movies(request, genre_id):
     genre = get_object_or_404(Genre, pk=genre_id)
@@ -94,43 +95,14 @@ def genre_movies(request, genre_id):
 
 
 @api_view(['GET'])
-def actors(request):
-    actors = Actor.objects.all()
-    serializer = ActorSerializer(actors, many=True)
+def people(request):
+    people = People.objects.all()
+    serializer = PeopleSerializer(people, many=True)
     return Response(serializer.data)
 
 
 @api_view(['GET'])
-def directors(request):
-    directors = Director.objects.all()
-    serializer = DirectorSerializer(directors, many=True)
+def people_detail(request, actor_id):
+    people = get_object_or_404(People, pk=actor_id)
+    serializer = PeopleSerializer(people, many=False)
     return Response(serializer.data)
-
-
-@api_view(['GET'])
-def staff(request):
-    staff = Staff.objects.all()
-    serializer = StaffSerializer(staff, many=True)
-    return Response(serializer.data)
-
-
-@api_view(['GET'])
-def actor_detail(request, actor_id):
-    actor = get_object_or_404(Actor, pk=actor_id)
-    serializer = ActorSerializer(actor, many=False)
-    return Response(serializer.data)
-
-
-@api_view(['GET'])
-def director_detail(request, director_id):
-    director = get_object_or_404(Director, pk=director_id)
-    serializer = DirectorSerializer(director, many=False)
-    return Response(serializer.data)
-
-
-@api_view(['GET'])
-def staff_detail(request, staff_id):
-    staff = get_object_or_404(Staff, pk=staff_id)
-    serializer = StaffSerializer(staff, many=False)
-    return Response(serializer.data)
-

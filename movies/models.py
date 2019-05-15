@@ -1,6 +1,6 @@
 from django.db import models
 from django.conf import settings
-from people.models import Director, Actor, Staff
+from people.models import People
 
 
 class Genre(models.Model):
@@ -36,9 +36,7 @@ class Movie(models.Model):
     poster_url = models.CharField(max_length=200, blank=True)
 
     # 기타 관계형 필드
-    actors = models.ManyToManyField(Actor, related_name='movies')
-    directors = models.ManyToManyField(Director, related_name='movies')
-    staffs = models.ManyToManyField(Staff, related_name='movies')
+    people = models.ManyToManyField(People, related_name='movies')
 
 
 class Comment(models.Model):
