@@ -10,6 +10,13 @@ class User(AbstractUser):
     checking = models.ManyToManyField(Movie, related_name='checked')
     loving_people = models.ManyToManyField(People, related_name="loved")
 
+    def is_my_star(self, person):
+        if not isinstance(person, People):
+            return
+
+        if person in self.loving_people.all():
+            return Temperature.objects.get(star=person.id)
+
 
 class Temperature(models.Model):
     temp = models.IntegerField(default=0)
@@ -18,6 +25,12 @@ class Temperature(models.Model):
 
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='temps')
     person = models.ForeignKey(People, on_delete=models.CASCADE, related_name='temps')
+
+    def click_movie(self):
+        self.movie_click += 1
+    
+    def click_portrait(self):
+        self.portrait_click += 1
 
 
 class GenrePreference(models.Model):
