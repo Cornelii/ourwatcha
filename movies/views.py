@@ -3,6 +3,7 @@ from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.decorators import login_required
 from .models import Movie, Genre, Comment, Trailer
 from django.db.models import F, Sum, Count, Case, When
+from django.http import JsonResponse
 
 
 def root(request):
@@ -64,6 +65,21 @@ def movie_checking(request):
         })
     else:
         return redirect('movies:index')
+
+
+# TODO: 페이지에 적용시키기 (API 방식으로 작동하여 Vue와 연동할 예정)
+@login_required
+def comment_like(request, comment_id):
+    comment = get_object_or_404(Comment, pk=comment_id)
+
+    if request.user in comment.liked.all:
+        comment.liked.remove(request.user)
+        context = {'message': f"{request.user.username} unlike {comment.id} comment"}
+    else:
+        comment.liked.add(request.user)
+        context = {'message': f"{request.user.username} like {comment.id} comment"}
+
+    return JsonResponse(context)
 
 
 # TODO: Not supposed to do yet.
