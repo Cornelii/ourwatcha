@@ -21,13 +21,20 @@ p {
     margin-bottom:3rem;
 }
 
+.movie-title-col {
+    padding:2rem;
+}
+
+.movie-info-col {
+    margin-left:3rem;
+}
 
 .movie-img {
     width:10rem;
     height:auto;
 }
 
-.director-list, .actor-list{
+.people-list{
     color:#dfdfdf;
     font-family: 'Spoqa Han Sans', 'Spoqa Han Sans JP', 'Sans-serif';
     font-size:25px;
@@ -86,4 +93,64 @@ hr {
     display:flex;
     align-items:center;
     justify-content:center;
+}
+
+hr {
+    border-color:#efefef;
+}
+
+.actor-list {
+    padding-left:4rem;
+    font-family: 'Spoqa Han Sans', 'Spoqa Han Sans JP', 'Sans-serif';
+    color:#efefef;
+}
+
+.actor-title {
+    font-family: 'Spoqa Han Sans', 'Spoqa Han Sans JP', 'Sans-serif';
+    font-size:12px;
+    font-weight:bold;
+}
+
+.actor-text {
+    font-family: 'Spoqa Han Sans', 'Spoqa Han Sans JP', 'Sans-serif';
+    font-size:10px;
+}
+
+.actor-img {
+    max-height:10rem;
+    max-width:7rem;
+    height:10rem;
+}
+
+.actor-card {
+    max-height:15rem;
+    max-width:7rem;
+    height:15rem;
+}
+
+.actor-row {
+    margin-left:2rem;
+}
+
+@media(max-width:900px){
+    .actor-title {
+        display:none;
+    }
+    .actor-card {
+        height:7.2rem;
+    }
+    .actor-img {
+        min-height:7rem;
+    }
+}
+
+@media(max-width:700px){
+    .actor-text {
+        display:none;
+    }
+
+    .actor-card {
+        height:7rem;
+    }
+
 }

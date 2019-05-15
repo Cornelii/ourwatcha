@@ -135,7 +135,7 @@ def actor_update(movie):
 
 
 if BOXOFFICE_FLAG:
-    movie_list = data.get_movie_list_from_boxoffice(10, '20170115', **weekly_boxoffice_query)
+    movie_list = data.get_movie_list_from_boxoffice(52, '20160715', **weekly_boxoffice_query)
 else:
     movie_list = data.get_movie_list(5, **movie_list_query)
 print(movie_list)
