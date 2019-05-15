@@ -20,10 +20,9 @@ def signup(request):
             return redirect('movies:index')
 
         # print error message (error reason) on signup page
-        print(form._errors.get_json_data())
         for _, each_field_errors in form._errors.get_json_data().items():
             for error in each_field_errors:
-                messages.warning(request, error.get('message'))
+                messages.danger(request, error.get('message'))
 
         return redirect('accounts:signup')
 
