@@ -16,7 +16,7 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 from movies import views as movies_view
-
+from accounts import views as accounts_view
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', movies_view.root, name='root'),
@@ -24,4 +24,5 @@ urlpatterns = [
     path('movies/', include('movies.urls')),
     path('people/', include('people.urls')),
     path('api/v1/', include('api.urls')),
+    path('<str:user_name>/', accounts_view.profile, name='profile'),
 ]

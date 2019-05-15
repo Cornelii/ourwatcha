@@ -1,0 +1,108 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}
+OurWatCha Movies
+{% endblock %}
+
+{% block css %}
+
+{% endblock %}
+
+
+{% block body %}
+    <div class="container" id="profile-app">
+        <hr>
+        <div class="row">
+            <div class="col">
+                {{ user.name }}
+                {{ user.username }}
+                email:{{ user.email }}
+            </div>
+            <div class="col">
+                <button class="btn btn-outline-light">팔로잉</button>
+            </div>
+        </div>
+        <hr>
+        <div class="row">
+            <div class="col">
+                <ul class="nav">
+                  <li class="nav-item">
+                    <a class="nav-link active" href="#" v-model="movies_check" @click="toggle1()">체크한 영화들</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" href="#" v-model="people_check" @click="toggle2()">관심영화인들</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" href="#" v-model="followings_check" @click="toggle3()">팔로우 하고 있는 유저들</a>
+                  </li>
+                </ul>
+            </div>
+        </div>
+        <hr>
+
+        <!-- 체크한 영화들 -->
+        <div class="row">
+            {% for movie in movies %}
+            <div class="col">
+                <div class="card">
+                    {% if movie.large_poster_url %}
+                        <img src="movie.large_poster_url" alt="" class="card-img-top img-fluid">
+                    {% elif movie.poster_url %}
+                        <img src="movie.poster_url" alt="" class="card-img-top img-fluid">
+                    {% else %}
+                        <img src="{% static 'imgs/noimage.gif' %}" alt="" class="card-img-top img-fluid">
+                    {% endif %}
+                    <div class="card-body">
+                        <div class="card-title">{{ movie.title }}</div>
+                        <div class="card-text">{{ movie.grade }}</div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+
+        <!-- 관심영화인들 -->
+        <div class="row">
+            {% for person in people %}
+            <div class="col">
+                <div class="card">
+                    {% if person.portrait_url %}
+                        <img src="person.portrait_url" alt="" class="card-img-top img-fluid">
+                    {% else %}
+                        <img src="{% static 'people/img/defaultUser.jpg' %}" alt="" class="card-img-top img-fluid">
+                    {% endif %}
+                    <div class="card-body">
+                        <div class="card-title">{{ person.name }}</div>
+                        <div class="card-text">
+                            {% for role in person.roles.all %}
+                                <p>{{ role.type_name }}</p>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+
+        <!-- 팔로우하고 있는 유저들 -->
+        <div class="row">
+            {% for following in followings %}
+                <div class="col">
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="card-title">{{ following.name }}</div>
+                            <div class="card-text">{{ follwing.email }}</div>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+
+
+{% endblock %}
+
+{% block js %}
+    <script src="{% static 'accounts/js/profile.js' %}"></script>
+{% endblock %}

@@ -63,13 +63,13 @@
                                 <form action="{% url 'accounts:login' %}" method="POST">
                                     {% csrf_token %}
                                     {% bootstrap_form form %}
-                                    <button type="submit" class="btn btn-primary">로그인하기</button>
+                                    <button type="submit" class="btn btn-primary">Sign-in</button>
                                 </form>
                             </div>
                             <!-- modal footer -->
                             <div class="modal-footer">
                                 <a href="{% url 'accounts:signup' %}">
-                                    <button type="button" class="btn">회원가입하기</button>
+                                    <button type="button" class="btn">Sign-up</button>
                                     </a>
                             </div>
                         </div>

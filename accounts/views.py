@@ -3,6 +3,7 @@ from django.contrib.auth import login as auth_login
 from django.contrib.auth import logout as auth_logout
 from django.contrib.auth.forms import AuthenticationForm
 from .forms import CustomUserCreationForm
+from django.contrib.auth.decorators import login_required
 from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.contrib.auth import update_session_auth_hash
@@ -47,8 +48,18 @@ def withdraw(request):
     pass
 
 
-def profile(request):
-    pass
+@login_required
+def profile(request, user_name):
+    if request.user.is_authenticated:
+        user = get_user_model()
+        people = user.loving_people.all()
+        followings = user.followings.all()
+        movies = user.checking.all()
+        return render(request, 'accounts/profile.html',{
+            'people': people,
+            'followings': followings,
+            'movies': movies,
+        })
 
 def change(request):
     pass

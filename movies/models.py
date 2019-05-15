@@ -32,8 +32,9 @@ class Movie(models.Model):
 
 
     # naver 업데이트 시 채워지는 필드
-    description = models.TextField(blank=True)
-    poster_url = models.CharField(max_length=200, blank=True)
+    description = models.TextField(blank=True, null=True)
+    poster_url = models.CharField(max_length=200, blank=True, null=True)
+    large_poster_url = models.CharField(max_length=200, blank=True, null=True)
 
     # 기타 관계형 필드
     people = models.ManyToManyField(People, related_name='movies')
