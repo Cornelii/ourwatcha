@@ -7,7 +7,21 @@ OurWatCha Movies
 
 
 {% block body %}
-    <link rel="stylesheet" href="{% static 'movies/css/movies.css' %}">
+<link rel="stylesheet" href="{% static 'movies/css/movies.css' %}">
+
+<!-- django messages start -->
+{% if messages %}
+<ul class="messages">
+    {% for msg in messages %}       
+    <li>
+        <div class="alert alert-{{msg.level_tag}}" role="alert">
+        {{msg.message}}
+        </div>
+    </li>
+    {% endfor %}
+</ul>
+{% endif %}
+<!-- django messages end -->
 
 <div class="container-fluid" id="movie_app">
     {% load bootstrap4 %}
