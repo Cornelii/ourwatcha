@@ -61,9 +61,10 @@ def actor_update(movie):
         # larget_poster_url
         lpu_res = requests.get(basic_url)
         lpu_soup =BS(lpu_res.text, 'html.parser')
-        lpu_d1 = lpu_soup.select('.poster > a > img')[0]
-        lpu_d2 = lpu_d1['src']
-        movie.large_poster_url = lpu_d2[:lpu_d2.find('?')]+'/'
+        if lpu_soup.select('.poster > a > img'):
+            lpu_d1 = lpu_soup.select('.poster > a > img')[0]
+            lpu_d2 = lpu_d1['src']
+            movie.large_poster_url = lpu_d2[:lpu_d2.find('?')]+'/'
         # naver에서 배우 imag들 스크랩핑
 
         detail_url = basic_url.replace('basic','detail')
@@ -134,7 +135,7 @@ def actor_update(movie):
 
 
 if BOXOFFICE_FLAG:
-    movie_list = data.get_movie_list_from_boxoffice(60, '20180115', **weekly_boxoffice_query)
+    movie_list = data.get_movie_list_from_boxoffice(10, '20170115', **weekly_boxoffice_query)
 else:
     movie_list = data.get_movie_list(5, **movie_list_query)
 print(movie_list)
