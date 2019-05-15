@@ -1,4 +1,5 @@
 from django.shortcuts import render, get_object_or_404
+from django.db.models import Q
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from django.contrib.auth import get_user_model
@@ -9,6 +10,7 @@ from .serializers import MovieSerializer, CommentSerializer, GenreSerializer
 from .serializers import ActorSerializer, StaffSerializer, DirectorSerializer
 from movies.models import Movie, Comment, Genre
 from people.models import Actor, Director, Staff
+from accounts.models import Temperature, GenrePreference
 
 
 @api_view(['GET'])
@@ -25,20 +27,36 @@ def movie_detail(request, movie_id):
     return Response(serializer.data)
 
 
+# TODO 포스트 쪽에 평점 연결.
 @api_view(['GET', 'POST'])
 def comment_list(request, movie_id):
+    movie = get_object_or_404(Movie, pk=movie_id)
     if request.method == 'POST':
         if request.user.is_authenticated:
             print(request.user.id)
             request.data.update(user=request.user.id)
             serializer = CommentSerializer(data=request.data)
             if serializer.is_valid(raise_exception=True):
-                serializer.save()
+                serializer.save()  # 평점이 등록되는 순간
+                # 기존 해당 장르선호도 존재하는지 확인.(복수개의 장르가 존재 가능)
+                genres = movie.genre.all()
+                for genre in genres:
+                    try:
+                        gp = GenrePreference.objects.get(Q(user_id=request.user.id) & Q(genre_id=genre.id))
+                    except:
+                        # 없다면 장르선호도 생성
+                        gp = GenrePreference.objects.create(user_id=request.user.id, genre=genre)
+                    # 평점에 따라 스코어 부여
+                    user_score = int(request.data.get('score'))
+                    if user_score < 5:
+                        gp.score -= user_score
+                    else:
+                        gp.score += user_score
+                    gp.save()
                 return Response(serializer.data)
         else:
-            return Response({'message':'인증되지 않은 사용자입니다.'})
+            return Response({'message': '인증되지 않은 사용자입니다.'})
     else:
-        movie = get_object_or_404(Movie, pk=movie_id)
         comments = movie.comments.all()
         serializer = CommentSerializer(comments, many=True)
         return Response(serializer.data)

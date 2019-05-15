@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}
+OurWatCha Movies
+{% endblock %}
+
+{% block css %}
+    <link rel="stylesheet" href="{% static 'movies/css/checking.css' %}">
+{% endblock %}
+
+{% block body %}
+<div class="container-fluid" id="check_app">
+    <div class="row">
+        {% for movie in movies %}
+        <div class="col">
+            <div class="card" @mouseenter="choose" @mouseleave="leave">
+                <img src="{{ movie.poster_url }}" alt="" class="card-img-top img-fluid">
+                <div class="card-body">
+                    <div class="card-title">{{ movie.title }}</div>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}
+
+
+{% block js %}
+    <script src="{% static 'movies/js/checking.js' %}"></script>
+{% endblock %}

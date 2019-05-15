@@ -1,7 +1,16 @@
 a {
-    color:white;
+    color:#efefef;
 }
 
 h3 {
-    color:white;
+    color:#efefef;
+}
+
+.filmo-name {
+    color:#efefef;
+    font-size:20px
+}
+
+hr {
+    border-color:#efefef;
 }

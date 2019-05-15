@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from .models import Director, Actor, Staff
 from django.contrib.auth.decorators import login_required
 
-# Create your views here.
+
 
 # TODO: people page
 def index(request):
@@ -26,7 +26,7 @@ def director_list(request):
         'staff': {},
     })
 
-# TODO: actor list page
+
 def actor_list(request):
     actors = Actor.objects.all()
 
@@ -46,30 +46,39 @@ def staff_list(request):
         'staff': staff,
     })
 
-# TODO: director detail page
+
 def director_detail(request, director_id):
     person = get_object_or_404(Director, pk=director_id)
     status = '감독'
+    filmo = person.filmography
+    filmo = filmo.split('|')
     return render(request, 'people/detail.html',{
         'person': person,
-        'status':status
+        'status': status,
+        'filmo':filmo,
     })
 
-# TODO: actor detail page
+
 def actor_detail(request, actor_id):
     person = get_object_or_404(Actor, pk=actor_id)
     status = '배우'
+    filmo = person.filmography
+    filmo = filmo.split('|')
     return render(request, 'people/detail.html', {
         'person': person,
-        'status': status
+        'status': status,
+        'filmo': filmo,
     })
 
-# TODO: staff detail page
+
 def staff_detail(request, staff_id):
     person = get_object_or_404(Staff, pk=staff_id)
     status = '스태프'
+    filmo = person.filmography
+    filmo = filmo.split('|')
     return render(request, 'people/detail.html', {
         'person': person,
-        'status': status
+        'status': status,
+        'filmo': filmo,
     })
 

@@ -1,3 +1,11 @@
+.recom-header {
+    color:#dfdfdf;
+    font-family: 'Spoqa Han Sans', 'Spoqa Han Sans JP', 'Sans-serif';
+    font-size:30px;
+    margin-top:5rem;
+}
+
+
 .carousel {
     margin:2rem;
     padding:2rem;
@@ -16,8 +24,24 @@
     font-size:10px;
 }
 
+.citems a{
+    text-decoration:none;
+}
+
 .card {
     height:35vh;
+}
+
+.carousel-control-prev {
+    position:absolute;
+    left:-4rem;
+    width:100px;
+}
+
+.carousel-control-next {
+    position:absolute;
+    right:-4rem;
+    width:100px;
 }
 
 @media(max-width:900px){
