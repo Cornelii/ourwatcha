@@ -95,9 +95,10 @@ def actor_update(movie):
                 # TODO: 동명이의인 처리
                 actor_info = data.get_actor_list(5, **actor_list_query)
                 for target_actor in actor_info:
-                    if movie.title in target_actor.get('filmography').split('|'):
-                        actor_info[0] = target_actor
-                        break
+                    if target_actor.get('filmography'):
+                        if movie.title in target_actor.get('filmography').split('|'):
+                            actor_info[0] = target_actor
+                            break
 
                 if actor_info:
                     role = actor_info[0].pop('role')
@@ -140,7 +141,7 @@ def actor_update(movie):
 
 
 if BOXOFFICE_FLAG:
-    movie_list = data.get_movie_list_from_boxoffice(52, '20140515', **weekly_boxoffice_query)
+    movie_list = data.get_movie_list_from_boxoffice(52, '20130515', **weekly_boxoffice_query)
 else:
     movie_list = data.get_movie_list(5, **movie_list_query)
 print(movie_list)

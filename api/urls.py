@@ -15,7 +15,7 @@ urlpatterns = [
     path('people/<int:people_id>', views.people_detail, name='people_detail'),
 
     # star scoring
-    path('movies/<int:movie_id>/', views.star_scoring),
+    path('movies/<int:movie_id>/star/', views.star_scoring),
 
 
     #TODO user-people temperatrue api

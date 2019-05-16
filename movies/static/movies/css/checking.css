@@ -47,6 +47,11 @@ h1 { font-size: 1.5em; margin: 10px; }
     bottom:0;
 }
 
+.notice{
+    color:#efefef;
+    list-style-type:none;
+}
+
 .card {
     width:24vh;
 }

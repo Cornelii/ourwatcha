@@ -2,9 +2,11 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.decorators import login_required
 from .models import Movie, Genre, Comment, Trailer
+from accounts.models import GenrePreference
 from django.db.models import F, Sum, Count, Case, When
 from django.http import JsonResponse
-
+from django.contrib import messages
+from django.db.models import Q
 
 def root(request):
     auth_form = AuthenticationForm()
@@ -26,6 +28,14 @@ def movie_extractor(obj):
 @login_required
 def index(request):
     if request.user.is_authenticated:
+        # 유저가 체크하지 않았다면, 체킹창으로 유도,
+        user = request.user
+        gps = user.preferences.all()
+        if gps:
+            pass
+        else:
+            messages.success(request, '먼저 영화에 평점을 매겨주세요. 많이 평점을 매기실 수록 기호에 맞는 영화를 찾으실 수 있습니다.')
+            return redirect('movies:movie_checking')
         movies = Movie.objects.all()
         # 유저가 체크하지 않은 영화 중 장르 선호도로 추천하기.
         # TODO:유저가 체크하지 않은 영화로 filtering하기.
@@ -59,7 +69,15 @@ def movie_detail(request, movie_id):
 @login_required
 def movie_checking(request):
     if request.user.is_authenticated:
-        movies = Movie.objects.all()
+        user = request.user
+        print('what')
+        checked_movies = user.checking.all()
+        print(checked_movies)
+        checked_id = []
+        for movie in checked_movies:
+            checked_id.append(movie.id)
+        # TODO sql caching 고려하기
+        movies = Movie.objects.filter(~Q(id__in=checked_id))
         return render(request, 'movies/checking.html', {
             'movies': movies
         })

@@ -12,6 +12,13 @@ OurWatCha Movies
 {% block body %}
 <div class="container-fluid" id="check_app">
     <div class="row">
+        <div class="col justify-content-center">
+            {% for message in messages %}
+              <li class="{{ message.tags }} notice">{{ message }}</li>
+            {% endfor %}
+        </div>
+    </div>
+    <div class="row">
         {% for movie in movies %}
         <div class="col">
             <div class="card" @mouseenter="choose" @mouseleave="leave" @mouseover="overM" id="{{ movie.id }}">
@@ -109,12 +116,12 @@ OurWatCha Movies
                 },
                 postScore: async function(movie_id, score){
 
-                    const url = location.origin + `/movies/${movie_id}/`
+                    const url = location.origin + `/api/v1/movies/${movie_id}/star/`;
                     let csrftoken = getCookie('csrftoken');
                     // const headers = new Headers();
                     // headers.append('X-CSRFToken', csrftoken);
                     const data = {
-                        'score':score,
+                        'score':score*2,
                     };
                     const res = await fetch(url, {
                         method:'POST',

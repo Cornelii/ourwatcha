@@ -11,7 +11,7 @@ from .serializers import PeopleSerializer
 from movies.models import Movie, Comment, Genre
 from people.models import People
 from accounts.models import Temperature, GenrePreference
-
+from django.http import JsonResponse
 
 @api_view(['GET'])
 def movie_list(request):
@@ -68,12 +68,15 @@ def comment_list(request, movie_id):
 # TODO 평점 적용 method.
 @api_view(['GET', 'POST'])
 def star_scoring(request, movie_id):
+    print('hit')
     movie = get_object_or_404(Movie, pk=movie_id)
     if request.method == 'POST':
+        print('hit')
         if request.user.is_authenticated:
             user = request.user
             # 체킹한 영화에 추가.
             user.checking.add(movie)
+            print(user.checking.all())
             # 기존 해당 장르선호도 존재하는지 확인.(복수개의 장르가 존재 가능)
             genres = movie.genre.all()
             for genre in genres:
@@ -143,3 +146,43 @@ def people_detail(request, actor_id):
     people = get_object_or_404(People, pk=actor_id)
     serializer = PeopleSerializer(people, many=False)
     return Response(serializer.data)
+
+
+@api_view(['GET', 'POST'])
+def movie_click_up(request, movie_id):
+    if request.method == 'POST':
+        if request.user.is_authenticated:
+            user = request.user
+            movie = get_object_or_404(Movie,pk=movie_id)
+            peoples = movie.people.all()
+            for person in peoples:
+                # 순회하며 해당 영화인과의 온도가 있는지 확인하고, 없다면 생성해서 가져오기
+                try:
+                    temp = user.temps.filter(Q(people_id__exact=person.id))
+                except:
+                    temp = Temperature.objects.create(user=user, people_id=person.id)
+                temp.click_movie()
+                temp.save()
+            return JsonResponse({'message': '성공적으로 업데이트 되었습니다.'})
+    return JsonResponse({'message': "검증되지 않은 사용자입니다."})
+
+
+@api_view(['GET', 'POST'])
+def portrait_click_up(request, people_id):
+    if request.method == 'POST':
+        if request.user.is_authenticated:
+            # 유저와 해당 영화인의 온도가 있는지 확인하고, 가져오기, 없다면 생성
+            user = request.user
+            try:
+                temp = user.temps.get(Q(people_id__exact=people_id))
+            except:
+                temp = Temperature.objects.create(user=user, people_id=people_id)
+            # 온도를 가져와서 portrait_click_up
+            temp.click_portrait()
+            temp.save()
+            return JsonResponse({'message': '성공적으로 업데이트 되었습니다.'})
+    return JsonResponse({'message': "검증되지 않은 사용자입니다."})
+
+
+
+#TODO 목록을 모아서 한번에 업데이트 하는 함수 정의 (localStorage)
