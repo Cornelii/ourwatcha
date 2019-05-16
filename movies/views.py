@@ -18,9 +18,13 @@ def root(request):
 def movie_extractor(obj):
     index_pointer = 0
     target = []
-    for i in range(3):
-        target.append(obj[index_pointer:index_pointer + 6])
-        index_pointer += 6
+    for i in range(5):
+        tmp_obj = obj[index_pointer:index_pointer + 6]
+        if tmp_obj:
+            target.append(tmp_obj)
+            index_pointer += 6
+        else:
+            break
     return target
 
 
@@ -37,19 +41,27 @@ def index(request):
             messages.success(request, '먼저 영화에 평점을 매겨주세요. 많이 평점을 매기실 수록 기호에 맞는 영화를 찾으실 수 있습니다.')
             return redirect('movies:movie_checking')
         movies = Movie.objects.all()
+        kinds = []
+
         # 유저가 체크하지 않은 영화 중 장르 선호도로 추천하기.
         # TODO:유저가 체크하지 않은 영화로 filtering하기.
         genre_preferences = request.user.preferences.all().order_by('-score')
         genre_movie = []
         for gp in genre_preferences:
             genre_movie.extend(gp.genre.movies.all())
-        print(genre_movie)
-
-        kinds = []
 
         # 장르선호도
         kinds.append(movie_extractor(genre_movie))
 
+        # 온도가 높은 영화인이 있는 영화.
+        try:
+            tmps_movie = []
+            tmp = user.temps.order_by('-temp').first()
+
+            tmps_movie.extend(tmp.person.movies.all())
+            kinds.append(movie_extractor(tmps_movie))
+        except:
+            pass
 
         return render(request, 'movies/index.html', {
             'kinds': kinds,

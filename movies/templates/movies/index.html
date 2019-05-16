@@ -16,7 +16,7 @@ OurWatCha Movies
         {% if forloop.counter0 == 0 %}
             <h4 class="recom-header text-center">장르선호도에 따른 추천</h4>
         {% elif forloop.counter0 == 1%}
-            <h4 class="recom-header text-center">관심배우에 따른 추천</h4>
+            <h4 class="recom-header text-center">관심영화인에 따른 추천</h4>
         {% endif %}
         <div id="indexcarousel{{ forloop.counter0 }}" class="carousel slide" data-ride="carousel">
 
@@ -33,7 +33,7 @@ OurWatCha Movies
                                     <div class="col col-sm-4 col-lg-2 citems">
                                         <a href="{% url 'movies:movie_detail' movie.id %}">
                                             <div class="card">
-                                                    <img src="{{ movie.poster_url }}" alt="" class="card-img-top img-fluid">
+                                                    <img src="{{ movie.large_poster_url }}" alt="" class="card-img-top img-fluid">
                                                     <div class="card-body">
                                                         <div class="card-title">{{ movie.title }}</div>
                                                         <div class="card-text">{{ movie.grade }}</div>
