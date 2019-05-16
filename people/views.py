@@ -27,7 +27,7 @@ def people_detail(request, people_id):
 def be_fan(request, people_id):
     if request.user.is_authenticated:
         person = get_object_or_404(People, pk=people_id)
-        user = get_user_model()
+        user = request.user
 
         if user in person.loved.all(): # fan임
             # fan취소
@@ -36,6 +36,23 @@ def be_fan(request, people_id):
         else:
             user.loving_people.add(person)
             fan = True
+        return JsonResponse({
+            'fan': fan
+        })
+    else:
+        return JsonResponse({'message':'인증 되지 않은 사용자입니다.'})
+
+
+def check_be_fan(request, people_id):
+    if request.user.is_authenticated:
+        person = get_object_or_404(People, pk=people_id)
+        user = request.user
+
+        if user in person.loved.all(): # fan임
+            # fan이니 True
+            fan = True
+        else:
+            fan = False
         return JsonResponse({
             'fan': fan
         })

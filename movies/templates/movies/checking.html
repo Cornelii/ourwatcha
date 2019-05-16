@@ -14,7 +14,7 @@ OurWatCha Movies
     <div class="row">
         {% for movie in movies %}
         <div class="col">
-            <div class="card" @mouseenter="choose" @mouseleave="leave">
+            <div class="card" @mouseenter="choose" @mouseleave="leave" @mouseover="overM" id="{{ movie.id }}">
                 <img src="{{ movie.poster_url }}" alt="" class="card-img-top img-fluid">
                 <div class="card-body">
                     <div class="card-title">{{ movie.title }}</div>
@@ -28,5 +28,111 @@ OurWatCha Movies
 
 
 {% block js %}
-    <script src="{% static 'movies/js/checking.js' %}"></script>
+{#    <script src="{% static 'movies/js/checking.js' %}"></script>#}
+    <script>
+        const getCookie = function(name) {
+            var cookieValue = null;
+            if (document.cookie && document.cookie !== '') {
+                var cookies = document.cookie.split(';');
+                for (var i = 0; i < cookies.length; i++) {
+                    var cookie = jQuery.trim(cookies[i]);
+                    // Does this cookie string begin with the name we want?
+                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+        }
+
+
+        const stars = `
+        <fieldset class="rating">
+            <input type="radio" id="star5" name="rating" value="5" /><label class = "full" for="star5" title="Awesome - 5 stars"></label>
+            <input type="radio" id="star4half" name="rating" value="4.5" /><label class="half" for="star4half" title="Pretty good - 4.5 stars"></label>
+            <input type="radio" id="star4" name="rating" value="4" /><label class = "full" for="star4" title="Pretty good - 4 stars"></label>
+            <input type="radio" id="star3half" name="rating" value="3.5" /><label class="half" for="star3half" title="Meh - 3.5 stars"></label>
+            <input type="radio" id="star3" name="rating" value="3" /><label class = "full" for="star3" title="Meh - 3 stars"></label>
+            <input type="radio" id="star2half" name="rating" value="2.5" /><label class="half" for="star2half" title="Kinda bad - 2.5 stars"></label>
+            <input type="radio" id="star2" name="rating" value="2" /><label class = "full" for="star2" title="Kinda bad - 2 stars"></label>
+            <input type="radio" id="star1half" name="rating" value="1.5" /><label class="half" for="star1half" title="Meh - 1.5 stars"></label>
+            <input type="radio" id="star1" name="rating" value="1" /><label class = "full" for="star1" title="Sucks big time - 1 star"></label>
+            <input type="radio" id="starhalf" name="rating" value="0.5" /><label class="half" for="starhalf" title="Sucks big time - 0.5 stars"></label>
+        </fieldset>
+        `;
+
+        const check_app = new Vue({
+            el: '#check_app',
+            delimiters: ['${', '}'],
+            data: {
+                stars:stars,
+            },
+            methods:{
+                hey:function(){
+                  console.log('hey')
+                },
+                choose:function(e){
+                    const target_tag = e.target;
+                    const div = document.createElement('div');
+                    div.id='star';
+                    div.style.position='absolute';
+                    div.style.bottom='0';
+                    div.innerHTML=this.stars;
+                    target_tag.appendChild(div);
+                },
+                leave:function(e){
+                    const target_tag = e.target;
+                    const remove_target = target_tag.querySelector('#star');
+                    target_tag.removeChild(remove_target);
+                },
+                overM:function(e){
+                    const a = document.querySelector('input[name="rating"]:checked');
+                    const star_value = document.querySelector('input[name="rating"]:hover');
+
+                    try{
+                        console.log(star_value.value*2);
+                        b = a.parentNode.parentNode.parentNode;
+                        const movie_id = b.id;
+                        const row = b.parentNode;
+                        if (a.value){
+                            // 포스팅 보내고 사라지게 하기
+                            console.log("Hi");
+                            this.postScore(movie_id, a.value);
+                            row.remove();
+                        }
+                    }catch{
+                        console.log('null-element')
+                    }
+
+
+                },
+                postScore: async function(movie_id, score){
+
+                    const url = location.origin + `/movies/${movie_id}/`
+                    let csrftoken = getCookie('csrftoken');
+                    // const headers = new Headers();
+                    // headers.append('X-CSRFToken', csrftoken);
+                    const data = {
+                        'score':score,
+                    };
+                    const res = await fetch(url, {
+                        method:'POST',
+                        headers:{
+                            'Content-Type':'application/json',
+                            'X-CSRFToken': csrftoken,
+                        },
+                        credentials:'same-origin',
+                        body:JSON.stringify(data),
+                    });
+                }
+            },
+            watch:{
+                star4h:function(){
+                    console.log(this.star4h);
+                }
+            }
+        })
+
+    </script>
 {% endblock %}

@@ -38,6 +38,9 @@ def comment_list(request, movie_id):
             serializer = CommentSerializer(data=request.data)
             if serializer.is_valid(raise_exception=True):
                 serializer.save()  # 평점이 등록되는 순간
+                # 유저와 영화를 연결
+                user = request.user
+                user.checking.add(movie)
                 # 기존 해당 장르선호도 존재하는지 확인.(복수개의 장르가 존재 가능)
                 genres = movie.genre.all()
                 for genre in genres:
@@ -60,6 +63,40 @@ def comment_list(request, movie_id):
         comments = movie.comments.all()
         serializer = CommentSerializer(comments, many=True)
         return Response(serializer.data)
+
+
+# TODO 평점 적용 method.
+@api_view(['GET', 'POST'])
+def star_scoring(request, movie_id):
+    movie = get_object_or_404(Movie, pk=movie_id)
+    if request.method == 'POST':
+        if request.user.is_authenticated:
+            user = request.user
+            # 체킹한 영화에 추가.
+            user.checking.add(movie)
+            # 기존 해당 장르선호도 존재하는지 확인.(복수개의 장르가 존재 가능)
+            genres = movie.genre.all()
+            for genre in genres:
+                try:
+                    gp = GenrePreference.objects.get(Q(user_id=request.user.id) & Q(genre_id=genre.id))
+                except:
+                    # 없다면 장르선호도 생성
+                    gp = GenrePreference.objects.create(user_id=request.user.id, genre=genre)
+                # 평점에 따라 스코어 부여
+                user_score = int(request.data.get('score'))
+                if user_score < 5:
+                    gp.score -= user_score
+                else:
+                    gp.score += user_score
+                gp.save()
+            return Response({'message': '평점이 적용되었습니다.'})
+        else:
+            return Response({'message': '인증되지 않은 사용자입니다.'})
+    else:
+        comments = movie.comments.all()
+        serializer = CommentSerializer(comments, many=True)
+        return Response(serializer.data)
+
 
 
 @api_view(['GET', 'DELETE', 'PUT'])
