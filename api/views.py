@@ -61,8 +61,15 @@ def comment_list(request, movie_id):
             return Response({'message': '인증되지 않은 사용자입니다.'})
     else:
         comments = movie.comments.all()
-        serializer = CommentSerializer(comments, many=True)
-        return Response(serializer.data)
+        # serializer = CommentSerializer(comments, many=True)
+        # return Response(serializer.data)
+        datas = comments.values()
+        for data in datas:
+            data.update({
+                'liked_people': Comment.objects.get(pk=data.get('id')).liked.all(),
+                'liked_num': Comment.objects.get(pk=data.get('id')).liked.all().count(),
+            })
+        return Response(datas)
 
 
 # TODO 평점 적용 method.
