@@ -158,10 +158,11 @@ def movie_click_up(request, movie_id):
             for person in peoples:
                 # 순회하며 해당 영화인과의 온도가 있는지 확인하고, 없다면 생성해서 가져오기
                 try:
-                    temp = user.temps.filter(Q(people_id__exact=person.id))
+                    temp = user.temps.filter(Q(person_id__exact=person.id))[0]
                 except:
-                    temp = Temperature.objects.create(user=user, people_id=person.id)
+                    temp = Temperature.objects.create(user=user, person_id=person.id)
                 temp.click_movie()
+                temp.temp_update()
                 temp.save()
             return JsonResponse({'message': '성공적으로 업데이트 되었습니다.'})
     return JsonResponse({'message': "검증되지 않은 사용자입니다."})
@@ -174,11 +175,12 @@ def portrait_click_up(request, people_id):
             # 유저와 해당 영화인의 온도가 있는지 확인하고, 가져오기, 없다면 생성
             user = request.user
             try:
-                temp = user.temps.get(Q(people_id__exact=people_id))
+                temp = user.temps.get(Q(person_id__exact=people_id))
             except:
-                temp = Temperature.objects.create(user=user, people_id=people_id)
+                temp = Temperature.objects.create(user=user, person_id=people_id)
             # 온도를 가져와서 portrait_click_up
             temp.click_portrait()
+            temp.temp_update()
             temp.save()
             return JsonResponse({'message': '성공적으로 업데이트 되었습니다.'})
     return JsonResponse({'message': "검증되지 않은 사용자입니다."})

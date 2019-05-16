@@ -3,7 +3,7 @@ from .models import People
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import get_user_model
 from django.http import JsonResponse
-
+from django.db.models import Q
 #TODO people pages
 def index(request):
     people = People.objects.all()
@@ -17,9 +17,15 @@ def people_detail(request, people_id):
     person = get_object_or_404(People, pk=people_id)
     filmo = person.filmography
     filmo = filmo.split('|')
+    temp = 0
+    try:
+        temp = request.user.temps.filter(Q(person_id__exact=people_id))[0]
+    except:
+        pass
     return render(request, 'people/detail.html',{
         'person': person,
         'filmo': filmo,
+        'temp': temp,
     })
 
 

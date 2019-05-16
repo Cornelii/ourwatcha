@@ -34,6 +34,9 @@ OurWatCha Movies
             {% if user.is_authenticated %}
                 <button class="btn btn-outline-light" @click="loveToggle({{ person.id }})" v-show="loading">${fanMessage}</button>
             {% endif %}
+            {% if person in user.loving_people.all %}
+                <h3 class="temperature-text">현재 영화인과 당신의 온도: <span>{{ temp.temp }}</span></h3>
+            {% endif %}
         </div>
     </div>
     <hr>
@@ -57,6 +60,24 @@ OurWatCha Movies
 
 {% block js %}
     <script>
+        // cookies function
+        const getCookie = function(name) {
+            var cookieValue = null;
+            if (document.cookie && document.cookie !== '') {
+                var cookies = document.cookie.split(';');
+                for (var i = 0; i < cookies.length; i++) {
+                    var cookie = jQuery.trim(cookies[i]);
+                    // Does this cookie string begin with the name we want?
+                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+        }
+
+
         const people_app = new Vue({
             delimiters: ['${','}'],
             el:'#people_app',
@@ -91,6 +112,24 @@ OurWatCha Movies
             },
             beforeMount:function(){
                 this.LoveCheck({{ person.id }});
+            },
+            created: async function(){
+
+                const url = location.origin + `/api/v1/temperature/people/{{ person.id }}/`;
+                    let csrftoken = getCookie('csrftoken');
+                    // const headers = new Headers();
+                    // headers.append('X-CSRFToken', csrftoken);
+                    const res = await fetch(url, {
+                        method:'POST',
+                        headers:{
+                            'Content-Type':'application/json',
+                            'X-CSRFToken': csrftoken,
+                        },
+                        credentials:'same-origin',
+                        body:'',
+                    });
+
+                    console.log(res.status);
             }
         })
 

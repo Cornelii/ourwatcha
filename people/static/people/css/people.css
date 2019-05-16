@@ -14,3 +14,11 @@ h3 {
 hr {
     border-color:#efefef;
 }
+
+.temperature-text {
+    font-family: 'Spoqa Han Sans', 'Spoqa Han Sans JP', 'Sans-serif';
+    font-size:20px;
+}
+.temperature-text span {
+    color:indianred;
+}

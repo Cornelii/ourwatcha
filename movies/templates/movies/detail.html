@@ -10,7 +10,7 @@
 {% endblock %}
 
 {% block body %}
-    <div class="container-fluid" id="movie_app">
+    <div class="container-fluid">
         <div class="row">
             <div class="col movie-title-col">
                 <h4 class="movie-title">{{ movie.title }}</h4>
@@ -27,23 +27,23 @@
             <div class="col-8">
                 <div class="row people-list">
                     <p>감독:</p>
-                        {% for people in movie.people.all %}
-                            {% for role in people.roles.all %}
-                                {% if role.type_name == '감독' %}
-                                    <p class="peope-name pr-2">{{people.name}}</p>
-                                {% endif %}
-                            {% endfor %}
+                    {% for people in movie.people.all %}
+                        {% for role in people.roles.all %}
+                            {% if role.type_name == '감독' %}
+                                <p class="peope-name pr-2">{{ people.name }}</p>
+                            {% endif %}
                         {% endfor %}
+                    {% endfor %}
                 </div>
                 <div class="row people-list">
                     <p>배우:</p>
                     {% for people in movie.people.all %}
-                            {% for role in people.roles.all %}
-                                {% if role.type_name == '배우' %}
-                                    <p class="peope-name pr-2">{{people.name}}</p>
-                                {% endif %}
-                            {% endfor %}
+                        {% for role in people.roles.all %}
+                            {% if role.type_name == '배우' %}
+                                <p class="peope-name pr-2">{{ people.name }}</p>
+                            {% endif %}
                         {% endfor %}
+                    {% endfor %}
                 </div>
                 <div class="row">
                     <div class="col movie-info-col">
@@ -74,25 +74,29 @@
     <br>
     <!-- trailer -->
     <h4 class="actor-list">감독&배우</h4>
-        <hr>
-    <div class="row actor-row">
-        {% for people in movie.people.all %}
-        <div class="col-2 actor-col m-1 p-1">
-            <a href="{% url 'people:people_detail' people.id %}">
-                <div class="card actor-card">
-                    {% if people.portrait_url %}
-                        <img src="{{people.portrait_url}}" alt="" class="card-img-top img-fluid actor-img actor-img">
-                    {% else %}
-                        <img src="{% static 'people/img/defaultUser.jpg' %}" alt="" class="card-img-top img-fluid actor-img">
-                    {% endif %}
-                    <div class="card-body">
-                        <div class="card-title actor-title">{{people.name}}</div>
-                        <div class="card-text actor-text">{{people.en_name}}</div>
-                    </div>
+    <hr>
+    <div class="container-fluid" id="actor-app">
+        <div class="row actor-row">
+            {% for people in movie.people.all %}
+                <div class="col-2 actor-col m-1 p-1">
+                    <a href="{% url 'people:people_detail' people.id %}">
+                        <div class="card actor-card">
+                            {% if people.portrait_url %}
+                                <img src="{{ people.portrait_url }}" alt=""
+                                     class="card-img-top img-fluid actor-img actor-img">
+                            {% else %}
+                                <img src="{% static 'people/img/defaultUser.jpg' %}" alt=""
+                                     class="card-img-top img-fluid actor-img">
+                            {% endif %}
+                            <div class="card-body">
+                                <div class="card-title actor-title">{{ people.name }}</div>
+                                <div class="card-text actor-text">{{ people.en_name }}</div>
+                            </div>
+                        </div>
+                    </a>
                 </div>
-            </a>
+            {% endfor %}
         </div>
-        {% endfor %}
     </div>
     <hr>
     <div class="row">
@@ -146,7 +150,41 @@
 {% endblock %}
 
 {% block js %}
-    <script src="{% static 'movies/js/app.js' %}"></script>
     <script src="{% static 'movies/js/jquery3.4.1.js' %}"></script>
     <script src="{% static 'movies/js/detail.js' %}"></script>
+
+    <script>
+        const actor_app = new Vue({
+            delimiters: ['${','}'],
+            el: 'actor-app',
+            data:{
+
+            },
+            methods:{
+
+            },
+            created:async function(){
+
+                const url = location.origin + `/api/v1/temperature/movie/{{ movie.id }}/`;
+                    let csrftoken = getCookie('csrftoken');
+                    // const headers = new Headers();
+                    // headers.append('X-CSRFToken', csrftoken);
+                    const res = await fetch(url, {
+                        method:'POST',
+                        headers:{
+                            'Content-Type':'application/json',
+                            'X-CSRFToken': csrftoken,
+                        },
+                        credentials:'same-origin',
+                        body:'',
+                    });
+
+                    console.log(res);
+                    console.log(res.status);
+
+            }
+        })
+
+
+    </script>
 {% endblock %}

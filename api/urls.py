@@ -17,6 +17,9 @@ urlpatterns = [
     # star scoring
     path('movies/<int:movie_id>/star/', views.star_scoring),
 
+    # click count
+    path('temperature/movie/<int:movie_id>/', views.movie_click_up),
+    path('temperature/people/<int:people_id>/', views.portrait_click_up),
 
     #TODO user-people temperatrue api
 

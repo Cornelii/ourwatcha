@@ -21,8 +21,8 @@ class User(AbstractUser):
 
 class Temperature(models.Model):
     temp = models.IntegerField(default=0)
-    movie_click = models.IntegerField(blank=True, null=True)
-    portrait_click = models.IntegerField(blank=True, null=True)
+    movie_click = models.IntegerField(default=0, null=True)
+    portrait_click = models.IntegerField(default=0, null=True)
 
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='temps')
     person = models.ForeignKey(People, on_delete=models.CASCADE, related_name='temps')
@@ -32,6 +32,9 @@ class Temperature(models.Model):
     
     def click_portrait(self):
         self.portrait_click += 1
+
+    def temp_update(self):
+        self.temp = self.movie_click + 2*self.portrait_click
 
 
 class GenrePreference(models.Model):
