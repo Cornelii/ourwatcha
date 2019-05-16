@@ -25,14 +25,17 @@ const movieDetailApp = new Vue({
         user_content:'',
         user_score:null,
     },
-    created: async function(){
-        const comment_url = this.api_url + `movies/${this.movie_id}/comments/`;
-        const res = await fetch(comment_url, {method:'GET'});
-        const parsed = await res.json();
-        console.log(parsed);
-        this.comments = parsed;
+    created: function(){
+        this.loadComments();
     },
     methods:{
+        loadComments: async function() {
+            const comment_url = this.api_url + `movies/${this.movie_id}/comments/`;
+            const res = await fetch(comment_url, {method:'GET'});
+            const parsed = await res.json();
+            console.log(parsed);
+            this.comments = parsed;
+        },
         postComment:async function(){
             let csrftoken = getCookie('csrftoken');
             // const headers = new Headers();
@@ -54,7 +57,9 @@ const movieDetailApp = new Vue({
                 body:JSON.stringify(data),
             });
 
-            console.log(res);
+            if (res.status === 200) {
+                this.loadComments();
+            }
         }
     },
     computed:{
