@@ -72,6 +72,8 @@ def actor_update(movie):
         # peopleUrl is not correct
         soup = BS(res.text, 'html.parser')
         img_tags = soup.select('.p_thumb > a > img')
+        dir_tags = soup.select('.thumb_dir > a > img')
+        img_tags += dir_tags
         actor_imgs = {}
         for tag in img_tags:
             actor_imgs.update({tag['alt']: tag['src']})
@@ -109,6 +111,9 @@ def actor_update(movie):
                     except:
                         person = People.objects.create(**actor_info[0])
                         movie.people.add(person)
+                    if person.portrait_url:
+                        pass
+                    else:
                         person.portrait_url = actor_imgs.get(name)
                     person.roles.add(role_obj)
                     person.save()
@@ -135,7 +140,7 @@ def actor_update(movie):
 
 
 if BOXOFFICE_FLAG:
-    movie_list = data.get_movie_list_from_boxoffice(52, '20160715', **weekly_boxoffice_query)
+    movie_list = data.get_movie_list_from_boxoffice(52, '20150515', **weekly_boxoffice_query)
 else:
     movie_list = data.get_movie_list(5, **movie_list_query)
 print(movie_list)
@@ -207,4 +212,4 @@ def actor_append(movie):
 ## TODO: 업데이트가 필요한 데이터 업데이터 만들기.
 
 
-
+## TODO. 큰 포스터 없는 영화에 대해 스프래핑 해오는 코드.

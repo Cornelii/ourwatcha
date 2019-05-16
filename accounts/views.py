@@ -62,25 +62,24 @@ def withdraw(request):
 
 
 @login_required
-def profile(request, user_name):
+def profile(request, username):
     if request.user.is_authenticated:
-        user = get_user_model()
-        people = user.loving_people.all()
-
-        followings = user.followings.all()
-        movies = user.checking.all()
-        return render(request, 'accounts/profile.html',{
+        person = get_object_or_404(get_user_model(), username=username)
+        people = person.loving_people.all()
+        followings = person.followings.all()
+        movies = person.checking.all()
+        return render(request, 'accounts/profile.html', {
+            'person': person,
             'people': people,
             'followings': followings,
             'movies': movies,
         })
 
-
-@login_required()
+@login_required
 def follow(request, user_id): # user_it to follow
     if request.user.is_authenticated:
         target_user = get_object_or_404(User, pk=user_id)
-        user = get_user_model()
+        user = request.user
         if user in target_user.followed.all():
             # 팔로잉 중 이므로 팔로잉 취소.
             user.followings.remove(target_user)
@@ -90,7 +89,25 @@ def follow(request, user_id): # user_it to follow
             user.followings.add(target_user)
             follow_status = True
         return JsonResponse({
-            'follow': follow_status
+            'follow_status': follow_status
+        })
+    return JsonResponse({
+        'message': "인증되지 않은 사용자입니다."
+    })
+
+
+def follow_check(request, user_id):  # user_it to follow
+    if request.user.is_authenticated:
+        target_user = get_object_or_404(User, pk=user_id)
+        user = request.user
+        if user in target_user.followed.all():
+            # 팔로잉 중 이므로 True 반환
+            follow_status = True
+        else:
+            # 팔로잉!
+            follow_status = False
+        return JsonResponse({
+            'follow_status': follow_status
         })
     return JsonResponse({
         'message': "인증되지 않은 사용자입니다."
@@ -109,4 +126,5 @@ def change(request):
                 'form': form,
                 'button_message': '변경하기',
             })
+
 

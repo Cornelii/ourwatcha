@@ -15,12 +15,14 @@ OurWatCha Movies
         <hr>
         <div class="row">
             <div class="col">
-                {{ user.name }}
-                {{ user.username }}
-                email:{{ user.email }}
+                {{ person.name }}
+                {{ person.username }}
+                email:{{ person.email }}
             </div>
             <div class="col">
-                <button class="btn btn-outline-light">팔로잉</button>
+                {% if person != user and user.is_authenticated %}
+                    <button class="btn btn-outline-light" @click="followToggle({{ person.id }})" v-show="loading">[[followMessage]]</button>
+                {% endif %}
             </div>
         </div>
         <hr>
@@ -104,5 +106,88 @@ OurWatCha Movies
 {% endblock %}
 
 {% block js %}
-    <script src="{% static 'accounts/js/profile.js' %}"></script>
+    <script>
+        const profile_app = new Vue({
+            delimiters: ['[[',']]'],
+            el: '#profile-app',
+            data:{
+                movies_check:false,
+                people_check:false,
+                followings_check:false,
+                follow_state:'',
+                loading:false,
+            },
+            watch:{
+                movies_check:function(val){
+                    if(val){
+                        this.people_check = false;
+                        this.followings_check = false;
+                    }
+                },
+                people_check:function(val){
+                    if(val){
+                        this.movies_check = false;
+                        this.followings_check = false;
+                    }
+                },
+                followings_check:function(val){
+                    if(val){
+                        this.movies_check = false;
+                        this.people_check = false;
+                    }
+                },
+            },
+            methods:{
+                toggle1:function(){
+                    this.followings_check = false;
+                    this.people_check = false;
+                    this.movies_check = true;
+                },
+                toggle2:function(){
+                    this.followings_check = false;
+                    this.movies_check = false;
+                    this.people_check = true;
+                },
+                toggle3:function(){
+                    this.movies_check = false;
+                    this.people_check = false;
+                    this.followings_check = true;
+                },
+                followToggle: async function(user_id){
+                    const res = await axios.get(location.origin+`/accounts/follow/${user_id}/`);
+                    console.log('followToggle was activated');
+                    if (res.status === 200){
+                        if (res.data.follow_status){
+                            this.follow_state = true;
+                        }else{
+                            this.follow_state = false;
+                        }
+                    }
+                },
+                checkFollow:async function(user_id){
+                    const res = await axios.get(location.origin+`/accounts/followcheck/${user_id}/`);
+                    if (res.status === 200){
+                        if (res.data.follow_status){
+                            this.follow_state = true;
+                        }else{
+                            this.follow_state = false;
+                        }
+                        this.loading = true;
+                    }
+                }
+            },
+            computed:{
+                followMessage:function(){
+                    if(this.follow_state){
+                        return '팔로잉 중'
+                    }else{
+                        return '팔로우하기'
+                    }
+                }
+            },
+            beforeMount: function(){
+                this.checkFollow({{person.id}});
+            }
+        })
+    </script>
 {% endblock %}

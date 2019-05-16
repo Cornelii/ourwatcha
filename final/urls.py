@@ -24,5 +24,5 @@ urlpatterns = [
     path('movies/', include('movies.urls')),
     path('people/', include('people.urls')),
     path('api/v1/', include('api.urls')),
-    path('<str:user_name>/', accounts_view.profile, name='profile'),
+    path('<str:username>/', accounts_view.profile, name='profile'),
 ]

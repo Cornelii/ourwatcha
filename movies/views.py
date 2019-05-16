@@ -74,10 +74,10 @@ def comment_like(request, comment_id):
 
     if request.user in comment.liked.all:
         comment.liked.remove(request.user)
-        context = {'message': f"{request.user.username} unlike {comment.id} comment"}
+        context = {'message': "{} unlike {} comment".format(request.user.username, comment.id)}
     else:
         comment.liked.add(request.user)
-        context = {'message': f"{request.user.username} like {comment.id} comment"}
+        context = {'message': "{} like {} comment".format(request.user.username, comment.id)}
 
     return JsonResponse(context)
 
