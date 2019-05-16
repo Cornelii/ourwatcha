@@ -17,6 +17,8 @@ OurWatCha Movies
             <h4 class="recom-header text-center">장르선호도에 따른 추천</h4>
         {% elif forloop.counter0 == 1%}
             <h4 class="recom-header text-center">관심영화인에 따른 추천</h4>
+        {% else %}
+            <h4 class="recom-header text-center">팔로잉 추천</h4>
         {% endif %}
         <div id="indexcarousel{{ forloop.counter0 }}" class="carousel slide" data-ride="carousel">
 

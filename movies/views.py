@@ -63,6 +63,21 @@ def index(request):
         except:
             pass
 
+        # 팔로우하고 있는 유저가 높은 평점을 준 영화들.(코멘트 활용)
+        try:
+            follow_movie = []
+            follow = user.followings.first()
+            follow_high_score_comments = follow.comments.order_by('-score').all()
+            # TODO:중복영화 처리
+            for comment in follow_high_score_comments:
+                follow_movie.append(comment.movie)
+
+            print(follow_movie)
+            kinds.append(movie_extractor(follow_movie))
+
+        except:
+            pass
+
         return render(request, 'movies/index.html', {
             'kinds': kinds,
         })
@@ -110,6 +125,8 @@ def comment_like(request, comment_id):
         context = {'message': "{} like {} comment".format(request.user.username, comment.id)}
 
     return JsonResponse(context)
+
+
 
 
 # TODO: Not supposed to do yet.
