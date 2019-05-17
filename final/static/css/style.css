@@ -101,3 +101,7 @@ i.fa-list-alt {
     font-size:2rem;
     color:#efefef;
 }
+
+#startBtn:hover {
+    color:darkorange;
+}

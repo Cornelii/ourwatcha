@@ -27,12 +27,19 @@ OurWatCha Movies
 <!-- django messages end -->
 
 <div class="container-fluid" id="movie_app">
-    {% load bootstrap4 %}
-    <form action="" method="POST">
-        {% csrf_token %}
-        {% bootstrap_form form %}
-        <button class="btn btn-light" type="submit">{{ button_message }}</button>
-    </form>
+    <div class="row">
+        <div class="col">
+            {% load bootstrap4 %}
+            <form action="" method="POST">
+                {% csrf_token %}
+                {% bootstrap_form form %}
+                <button class="btn btn-light" type="submit">{{ button_message }}</button>
+                {% if button_message != '가입하기' %}
+                    <a href="{% url 'accounts:signup' %}" class="btn btn-primary">회원가입가입</a>
+                {% endif %}
+            </form>
+        </div>
+    </div>
 </div>
 
 {% endblock %}

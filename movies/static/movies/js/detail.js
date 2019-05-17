@@ -20,10 +20,11 @@ const movieDetailApp = new Vue({
     delimiters: ['${','}'],
     data: {
         comments:[],
-        api_url:'http://127.0.0.1:8000/api/v1/',
+        api_url:location.origin + '/api/v1/',
         current_path:currentLocation.pathname,
         user_content:'',
         user_score:null,
+        user_name: [],
     },
     created: function(){
         this.loadComments();
@@ -34,7 +35,21 @@ const movieDetailApp = new Vue({
             const res = await fetch(comment_url, {method:'GET'});
             const parsed = await res.json();
             console.log(parsed);
+
+            const user_array = [];
+            for (let idx in parsed) {
+                let userId = parsed[idx].user_id;
+                let username_url = this.api_url + `username/${userId}/`;
+                let res2 = await axios.get(username_url);
+
+                if (res2.data.username) {
+                    // user_array.push(res2.data.username);
+                    parsed[idx].user_name = res2.data.username
+                }
+            }
             this.comments = parsed;
+            this.user_name = user_array;
+            // console.log(this.user_name);
         },
         postComment:async function(){
             let csrftoken = getCookie('csrftoken');

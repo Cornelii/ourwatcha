@@ -193,5 +193,11 @@ def portrait_click_up(request, people_id):
     return JsonResponse({'message': "검증되지 않은 사용자입니다."})
 
 
+@api_view(['GET'])
+def username(request, user_id):
+    user = get_object_or_404(get_user_model(), pk=user_id)
+    username = user.username
+    return JsonResponse({"username":username})
+
 
 #TODO 목록을 모아서 한번에 업데이트 하는 함수 정의 (localStorage)

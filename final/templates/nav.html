@@ -1,10 +1,6 @@
 <nav class="navbar navbar-expand-sm" id="navbar">
     <!-- Brand logo -->
-    {% if user.is_authenticated %}
-        <a href="{% url 'root' %}" class="navbar-brand logo">OURWATCHA</a>
-    {% else %}
-        <a href="" class="navbar-brand logo">OURWATCHA</a>
-    {% endif %}
+    <a href="{% url 'root' %}" class="navbar-brand logo">OURWATCHA</a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"><i class="far fa-list-alt"></i></span>
     </button>
@@ -47,7 +43,7 @@
                 </li>
             {% else %}
                 <li class="nav-item">
-                    <button class="btn nav-content" data-toggle="modal" data-target="#navModal">로그인</button>
+                    <button class="btn nav-content" data-toggle="modal" data-target="#navModal" id="startBtn">시작하기</button>
                 </li>
                 <!-- login, singup modal -->
                 <div class="modal" id="navModal">

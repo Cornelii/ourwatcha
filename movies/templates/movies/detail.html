@@ -1,4 +1,5 @@
-<link rel="stylesheet" href="../../static/movies/css/movie_index.css">{% extends 'base.html' %}
+{% extends 'base.html' %}
+{#<link rel="stylesheet" href="../../static/movies/css/movie_index.css">#}
 {% load static %}
 
 {% block title %}
@@ -98,14 +99,13 @@
             {% endfor %}
         </div>
     </div>
+
     <hr>
     <div class="row">
         <div class="col">
 
         </div>
     </div>
-
-
 
     <div class="container-fluid" id="movie_detail_app">
         <br>
@@ -124,34 +124,32 @@
 
         <hr>
         <!-- 댓글 보여주기 -->
-        <div class="row user_comments">
-            <div class="col-2">
-                <p>작성자</p>
-                <template v-for="comment in comments">
-                    <p>${ comment.user }</p>
-                </template>
-            </div>
-            <div class="col-7">
-                <p>작성글</p>
-                <template v-for="comment in comments">
-                    <p>${ comment.content }</p>
-                </template>
-            </div>
-            <div class="col-2">
-                <p>유저평점</p>
-                <template v-for="comment in comments">
-                    <p>${ comment.score }점</p>
-                </template>
-            </div>
-            <div class="col-1">
-                <p>♥</p>
-                <template v-for="comment in comments">
-                    <p>${ comment.liked_num }</p>
-                </template>
-            </div>
+        <div class="row user_comments m-1">
+            <div class="col-2"><p>작성자</p></div>
+            <div class="col-7"><p>작성글</p></div>
+            <div class="col-1"><p>평점</p></div>
+            <div class="col-1" style="font-size:20px;"><p>♥</p></div>
         </div>
+        <template v-for="comment in comments">
+            <div class="row user_comments m-1">
+                <div class="col-2">
+                    <p>${ comment.user_name }</p>
+                </div>
+                <div class="col-7">
+                    <p>${ comment.content }</p>
+                </div>
+                <div class="col-1">
+                    <p class="d-inline">${ comment.score }점</p>
+                </div>
+                <div class="col-1">
+                    <button class="btn btn-outline-light">♥</button>
+                </div>
+                <div class="col-1">
+                    <p>${ comment.liked_num }</p>
+                </div>
+            </div>
+        </template>
     </div>
-
 
 {% endblock %}
 
@@ -167,10 +165,8 @@
                 comments: [],
             },
             methods:{
-
             },
             created:async function(){
-
                 const url = location.origin + `/api/v1/temperature/movie/{{ movie.id }}/`;
                     let csrftoken = getCookie('csrftoken');
                     // const headers = new Headers();
@@ -184,13 +180,7 @@
                         credentials:'same-origin',
                         body:'',
                     });
-
-                    console.log(res);
-                    console.log(res.status);
-
             }
         })
-
-
     </script>
 {% endblock %}

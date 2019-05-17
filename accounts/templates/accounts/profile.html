@@ -6,18 +6,21 @@ OurWatCha Movies
 {% endblock %}
 
 {% block css %}
-
+    <link rel="stylesheet" href="{% static 'accounts/css/profile.css' %}">
 {% endblock %}
 
 
 {% block body %}
     <div class="container" id="profile-app">
         <hr>
-        <div class="row">
+        <div class="row user-profile">
             <div class="col">
-                {{ person.name }}
-                {{ person.username }}
-                email:{{ person.email }}
+                <img src="{% static 'people/img/defaultUser.jpg' %}" alt="">
+            </div>
+            <div class="col profile-text">
+                <p>{{ person.name }}</p>
+                <p>{{ person.username }}</p>
+                <p>email: {{ person.email }}</p>
             </div>
             <div class="col">
                 {% if person != user and user.is_authenticated %}
@@ -41,13 +44,14 @@ OurWatCha Movies
                 </ul>
             </div>
         </div>
+
         <hr>
 
         <!-- 체크한 영화들 -->
-        <div class="row">
+        <div class="row" v-show="movies_check">
             {% for movie in movies %}
             <div class="col">
-                <div class="card">
+                <div class="card movie-card">
                     {% if movie.large_poster_url %}
                         <img src="{{ movie.large_poster_url }}" alt="" class="card-img-top img-fluid">
                     {% elif movie.poster_url %}
@@ -56,8 +60,8 @@ OurWatCha Movies
                         <img src="{% static 'imgs/noimage.gif' %}" alt="" class="card-img-top img-fluid">
                     {% endif %}
                     <div class="card-body">
-                        <div class="card-title">{{ movie.title }}</div>
-                        <div class="card-text">{{ movie.grade }}</div>
+                        <div class="card-title movie-title">{{ movie.title }}</div>
+                        <div class="card-text movie-text">{{ movie.grade }}</div>
                     </div>
                 </div>
             </div>
@@ -65,18 +69,18 @@ OurWatCha Movies
         </div>
 
         <!-- 관심영화인들 -->
-        <div class="row">
+        <div class="row" v-show="people_check">
             {% for person in people %}
             <div class="col">
-                <div class="card">
+                <div class="card people-card">
                     {% if person.portrait_url %}
                         <img src="{{ person.portrait_url }}" alt="" class="card-img-top img-fluid">
                     {% else %}
                         <img src="{% static 'people/img/defaultUser.jpg' %}" alt="" class="card-img-top img-fluid">
                     {% endif %}
                     <div class="card-body">
-                        <div class="card-title">{{ person.name }}</div>
-                        <div class="card-text">
+                        <div class="card-title people-title">{{ person.name }}</div>
+                        <div class="card-text people-text">
                             {% for role in person.roles.all %}
                                 <p>{{ role.type_name }}</p>
                             {% endfor %}
@@ -88,13 +92,13 @@ OurWatCha Movies
         </div>
 
         <!-- 팔로우하고 있는 유저들 -->
-        <div class="row">
+        <div class="row" v-show="followings_check">
             {% for following in followings %}
                 <div class="col">
-                    <div class="card">
+                    <div class="card user-card">
                         <div class="card-body">
-                            <div class="card-title">{{ following.name }}</div>
-                            <div class="card-text">{{ follwing.email }}</div>
+                            <div class="card-title user-title">{{ following.name }}</div>
+                            <div class="card-text user-text">{{ follwing.email }}</div>
                         </div>
                     </div>
                 </div>
@@ -111,7 +115,7 @@ OurWatCha Movies
             delimiters: ['[[',']]'],
             el: '#profile-app',
             data:{
-                movies_check:false,
+                movies_check:true,
                 people_check:false,
                 followings_check:false,
                 follow_state:'',

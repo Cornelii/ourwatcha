@@ -109,6 +109,7 @@ hr {
     font-family: 'Spoqa Han Sans', 'Spoqa Han Sans JP', 'Sans-serif';
     font-size:12px;
     font-weight:bold;
+    margin-bottom:4px;
 }
 
 .actor-text {
@@ -144,7 +145,7 @@ hr {
     }
 }
 
-@media(max-width:700px){
+@media(max-width:900px){
     .actor-text {
         display:none;
     }
