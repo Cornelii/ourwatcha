@@ -20,14 +20,16 @@ OurWatCha Movies
     </div>
     <div class="row">
         {% for movie in movies %}
-        <div class="col">
-            <div class="card" @mouseenter="choose" @mouseleave="leave" @mouseover="overM" id="{{ movie.id }}">
-                <img src="{{ movie.large_poster_url }}" alt="" class="card-img-top img-fluid">
-                <div class="card-body">
-                    <div class="card-title">{{ movie.title }}</div>
+            {% if movie.large_poster_url %}
+                <div class="col">
+                    <div class="card" @mouseenter="choose" @mouseleave="leave" @mouseover="overM" id="{{ movie.id }}">
+                        <img src="{{ movie.large_poster_url }}" alt="" class="card-img-top img-fluid">
+                        <div class="card-body">
+                            <div class="card-title">{{ movie.title }}</div>
+                        </div>
+                    </div>
                 </div>
-            </div>
-        </div>
+            {% endif %}
         {% endfor %}
     </div>
 </div>
