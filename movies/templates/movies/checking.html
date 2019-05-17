@@ -19,18 +19,20 @@ OurWatCha Movies
         </div>
     </div>
     <div class="row">
-        {% for movie in movies %}
-            {% if movie.large_poster_url %}
+{#        {% for movie in movies %}#}
+{##            {% if movie.large_poster_url %}#}
+            <template v-for="movie in movies">
                 <div class="col">
                     <div class="card" @mouseenter="choose" @mouseleave="leave" @mouseover="overM" id="{{ movie.id }}">
-                        <img src="{{ movie.large_poster_url }}" alt="" class="card-img-top img-fluid">
+                        <img :src="movie.large_poster_url" alt="" class="card-img-top img-fluid">
                         <div class="card-body">
-                            <div class="card-title">{{ movie.title }}</div>
+                            <div class="card-title">${ movie.title }</div>
                         </div>
                     </div>
                 </div>
-            {% endif %}
-        {% endfor %}
+            </template>
+{#            {% endif %}#}
+{#        {% endfor %}#}
     </div>
 </div>
 {% endblock %}
@@ -39,6 +41,8 @@ OurWatCha Movies
 {% block js %}
 {#    <script src="{% static 'movies/js/checking.js' %}"></script>#}
     <script>
+        const sess_storage = sessionStorage;
+
         const getCookie = function(name) {
             var cookieValue = null;
             if (document.cookie && document.cookie !== '') {
@@ -75,7 +79,10 @@ OurWatCha Movies
             el: '#check_app',
             delimiters: ['${', '}'],
             data: {
-                stars:stars,
+                stars: stars,
+                movies: [],
+                storage: sess_storage,
+                base_url: location.origin + '/api/v1/movies/',
             },
             methods:{
                 hey:function(){
@@ -138,6 +145,18 @@ OurWatCha Movies
             watch:{
                 star4h:function(){
                     console.log(this.star4h);
+                }
+            },
+            {# TODO: user unchecked movie retrieve api. #}
+            beforeMount: async function(){
+                this.movies = JSON.parse(this.storage.getItem('movies'));
+                if(this.movies){
+
+                }else{
+                    const res = await axios.get(this.base_url);
+                    this.movies = res.data;
+                    this.storage.setItem('movies', JSON.stringify(res.data));
+                    this.search_flag = false;
                 }
             }
         })
