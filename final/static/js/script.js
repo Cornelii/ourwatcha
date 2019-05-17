@@ -3,7 +3,7 @@ const nav_app = new Vue({
     delimiters:['${','}'],
     el:'#nav-app',
     data:{
-        base_url:'http://127.0.0.1:8000/api/v1/movies',
+        base_url:'http://127.0.0.1:8000/api/v1/movies/',
         user_search_input:'',
         movies:'',
         target_movies:[],

@@ -99,6 +99,20 @@ def star_scoring(request, movie_id):
                 else:
                     gp.score += user_score
                 gp.save()
+
+
+            # 영화와 연관된 모든 배우들과 온도생성
+            people = movie.people.all()
+            for person in people:
+                try:
+                    temp = user.temps.get(Q(person_id__exact=person.id))
+                except:
+                    temp = Temperature.objects.create(user=user, person_id=person.id)
+                # 온도를 가져와서 portrait_click_up
+                temp.click_movie()
+                temp.temp_update()
+                temp.save()
+
             return Response({'message': '평점이 적용되었습니다.'})
         else:
             return Response({'message': '인증되지 않은 사용자입니다.'})
