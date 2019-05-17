@@ -12,7 +12,7 @@
                     <input type="text" class="form-control search-bar" placeholder="영화로 검색" v-model="user_search_input" @click="searching">
                     <!-- search!!! -->
                     <ul class="search-list">
-                        <li v-for="movie in target_movies">
+                        <li v-for="movie in target_movies" v-show="!search_flag">
                             <a :href="origin_loc+'/movies/'+movie.id+'/'">
                                 <div class="row search-box">
                                     <div class="col-4">

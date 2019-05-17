@@ -9,6 +9,7 @@ const nav_app = new Vue({
         target_movies:[],
         origin_loc:location.origin,
         search_flag: true,
+        loading_full:false
     },
     methods:{
         searching:async function(){
