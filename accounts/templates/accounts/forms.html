@@ -5,9 +5,15 @@
 OurWatCha Movies
 {% endblock %}
 
+{% block css %}
+    <link rel="stylesheet" href="{% static 'movies/css/movies.css' %}">
+    <link rel="stylesheet" href="{% static 'css/nav_pos.css' %}">
+{% endblock %}
+
+{% endblock %}
 
 {% block body %}
-<link rel="stylesheet" href="{% static 'movies/css/movies.css' %}">
+
 
 <!-- django messages start -->
 {% if messages %}

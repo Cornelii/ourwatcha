@@ -6,28 +6,37 @@
 {% endblock %}
 
 {% block css %}
-    <link rel="stylesheet" href="{% static 'movies/css/movies.css' %}">
+    <link rel="stylesheet" href="{% static 'movies/css/root.css' %}">
 {% endblock %}
 
 
 {% block body %}
     <div class="container-fluid" id="app">
-        <div class="row root-box" id="root-order-1">
-            <div class="col">
-                <h2>기호에 맞는 영화를 추천 받아보세요!</h2>
+        <div class="root-container">
+            <div class="root-cover">
+                <h2>기호에 맞는 영화를 추천 받아보세요.</h2>
             </div>
+            <div class="row root-box" id="root-order-1"></div>
         </div>
-        <div class="row root-box" id="root-order-2">
-            <div class="col">
-                <h2>배우 또는 감독 등 영화인들과 당신의 온도를 측정해보세요!</h2>
+        <div class="root-container">
+            <div class="root-cover">
+                <h2>배우 혹은 감독과 당신의 온도를 측정해보세요!</h2>
             </div>
+            <div class="row root-box" id="root-order-2"></div>
         </div>
-        <div class="row root-box" id="root-order-3">
+        <div class="root-container">
+            <div class="root-cover">
+                <h2>comment2</h2>
+            </div>
+            <div class="row root-box" id="root-order-3"></div>
+        </div>
+        <div class="root-container">
+            <div class="root-cover">
+                <h2>comment3</h2>
+            </div>
+            <div class="row root-box" id="root-order-4"></div>
+        </div>
 
-        </div>
-        <div class="row root-box" id="root-order-4">
-
-        </div>
     </div>
 
 
@@ -35,5 +44,5 @@
 {% endblock %}
 
 {% block js %}
-    <script src="{% static 'movies/js/app.js' %}"></script>
+
 {% endblock %}

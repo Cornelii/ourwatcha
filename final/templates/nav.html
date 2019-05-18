@@ -45,34 +45,37 @@
                 <li class="nav-item">
                     <button class="btn nav-content" data-toggle="modal" data-target="#navModal" id="startBtn">시작하기</button>
                 </li>
-                <!-- login, singup modal -->
-                <div class="modal" id="navModal">
-                    <div class="modal-dialog modal-dialog-centered">
-                        <div class="modal-content">
-                            <!-- modal header -->
-                            <div class="modal-header">
-                                <button type="button" class="close" data-dismiss="modal">X</button>
-                            </div>
-                            <!-- modal body -->
-                            <div class="modal-body">
-                                {% load bootstrap4 %}
-                                <form action="{% url 'accounts:login' %}" method="POST">
-                                    {% csrf_token %}
-                                    {% bootstrap_form form %}
-                                    <button type="submit" class="btn btn-primary">Sign-in</button>
-                                </form>
-                            </div>
-                            <!-- modal footer -->
-                            <div class="modal-footer">
-                                <a href="{% url 'accounts:signup' %}">
-                                    <button type="button" class="btn">Sign-up</button>
-                                    </a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
             {% endif %}
 
         </ul>
     </div>
+
 </nav>
+{% if not user.is_authenticated %}
+<!-- login, singup modal -->
+    <div class="modal" id="navModal">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <!-- modal header -->
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">X</button>
+                </div>
+                <!-- modal body -->
+                <div class="modal-body">
+                    {% load bootstrap4 %}
+                    <form action="{% url 'accounts:login' %}" method="POST">
+                        {% csrf_token %}
+                        {% bootstrap_form form %}
+                        <button type="submit" class="btn btn-primary">Sign-in</button>
+                    </form>
+                </div>
+                <!-- modal footer -->
+                <div class="modal-footer">
+                    <a href="{% url 'accounts:signup' %}">
+                        <button type="button" class="btn">Sign-up</button>
+                        </a>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endif %}

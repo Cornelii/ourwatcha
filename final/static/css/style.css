@@ -1,5 +1,20 @@
 body {
-    background-color:#262730;
+    background-color:#181818;
+    /*position:relative;*/
+}
+
+#navbar {
+    position:absolute;
+    top:0;
+    z-index:200;
+    width:100%;
+    height:5rem;
+}
+
+.navbar-nav {
+    display:flex;
+    align-items:center;
+    z-index:400;
 }
 
 
@@ -37,31 +52,6 @@ nav a:hover {
 
 }
 
-.root-box {
-    height:110vh;
-    background-repeat: no-repeat;
-    background-position: center;
-    background-size:cover;
-    opacity:0.6;
-}
-
-
-
-#root-order-1 {
-    background-image: url("../imgs/gate_img1.jpg");
-}
-
-#root-order-2 {
-    background-image: url("../imgs/gate_img2.jpg");
-}
-
-#root-order-3 {
-    background-image: url("../imgs/gate_img3.jpg");
-}
-
-#root-order-4 {
-    background-image: url("../imgs/gate_img4.jpg");
-}
 
 .search-list {
     background-color:#efefef;
@@ -102,6 +92,15 @@ i.fa-list-alt {
     color:#efefef;
 }
 
+#startBtn {
+    color: #ffffff;
+    font-family: 'Spoqa Han Sans', 'Spoqa Han Sans JP', 'Sans-serif';
+    font-size:25px;
+}
+
 #startBtn:hover {
-    color:darkorange;
+    color:#fced84;
+    font-size:26px;
+    transition-duration:0.5s;
+    transition-property:color, font-size;
 }

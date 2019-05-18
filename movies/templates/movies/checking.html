@@ -7,6 +7,7 @@ OurWatCha Movies
 
 {% block css %}
     <link rel="stylesheet" href="{% static 'movies/css/checking.css' %}">
+    <link rel="stylesheet" href="{% static 'css/nav_pos.css' %}">
 {% endblock %}
 
 {% block body %}
@@ -150,7 +151,7 @@ OurWatCha Movies
             {# TODO: user unchecked movie retrieve api. #}
             beforeMount: async function(){
                 this.movies = JSON.parse(this.storage.getItem('movies'));
-                if(this.movies){
+                if(this.storage.getItem('movies')){
 
                 }else{
                     const res = await axios.get(this.base_url);
