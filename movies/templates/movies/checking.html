@@ -24,7 +24,7 @@ OurWatCha Movies
 {##            {% if movie.large_poster_url %}#}
             <template v-for="movie in movies">
                 <div class="col">
-                    <div class="card" @mouseenter="choose" @mouseleave="leave" @mouseover="overM" id="{{ movie.id }}">
+                    <div class="card" @mouseenter="choose" @mouseleave="leave" @mouseover="overM" :id="movie.id">
                         <img :src="movie.large_poster_url" alt="" class="card-img-top img-fluid">
                         <div class="card-body">
                             <div class="card-title">${ movie.title }</div>
@@ -84,6 +84,7 @@ OurWatCha Movies
                 movies: [],
                 storage: sess_storage,
                 base_url: location.origin + '/api/v1/movies/',
+
             },
             methods:{
                 hey:function(){
@@ -106,13 +107,15 @@ OurWatCha Movies
                 overM:function(e){
                     const a = document.querySelector('input[name="rating"]:checked');
                     const star_value = document.querySelector('input[name="rating"]:hover');
-
+                    console.log(star_value.value*2);
                     try{
-                        console.log(star_value.value*2);
-                        b = a.parentNode.parentNode.parentNode;
-                        const movie_id = b.id;
-                        const row = b.parentNode;
+
                         if (a.value){
+
+                            console.log(a.value*2)
+                            b = a.parentNode.parentNode.parentNode;
+                            const movie_id = b.id;
+                            const row = b.parentNode;
                             // 포스팅 보내고 사라지게 하기
                             this.postScore(movie_id, a.value);
                             row.remove();
@@ -120,12 +123,11 @@ OurWatCha Movies
                     }catch{
                         console.log('null-element')
                     }
-
-
                 },
                 postScore: async function(movie_id, score){
 
                     const url = location.origin + `/api/v1/movies/${movie_id}/star/`;
+                    console.log(`This is the point ${url}`);
                     let csrftoken = getCookie('csrftoken');
                     // const headers = new Headers();
                     // headers.append('X-CSRFToken', csrftoken);
